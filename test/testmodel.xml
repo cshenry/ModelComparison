@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="1" xmlns:html="http://www.w3.org/1999/xhtml">
+<model id="kb_g_213558_fbamdl0" name="Staphylococcus_aureus_T69721_SEED_model">
+<listOfUnitDefinitions>
+	<unitDefinition id="mmol_per_gDW_per_hr">
+		<listOfUnits>
+			<unit kind="mole" scale="-3"/>
+			<unit kind="gram" exponent="-1"/>
+			<unit kind="second" multiplier=".00027777" exponent="-1"/>
+		</listOfUnits>
+	</unitDefinition>
+</listOfUnitDefinitions>
+<listOfCompartments>
+<compartment id="c" name="Cytosol_0" />
+<compartment id="e" name="Extracellular_0" />
+</listOfCompartments>
+<listOfSpecies>
+<species id="cpd99989_c" name="ACP_c" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99990_c" name="Apo-ACP_c" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99996_e" name="A_e" compartment="e" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99996_c" name="A_c" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99997_c" name="B_c" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99997_e" name="B_e" compartment="e" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99998_c" name="C_c" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99999_c" name="D_c" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: C</p>
+      <p>CHARGE: -2</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd11416_c" name="Biomass_c" compartment="c" charge="0" boundaryCondition="false">
+</species>
+</listOfSpecies>
+<listOfReactions>
+<reaction id="my99990_c" name="my99990_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99990_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99989_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="my99991_c" name="my99991_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99996_e" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99996_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="my99992_c" name="my99992_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99996_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="my99997_c" name="my99997_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99997_e" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="my99993_c" name="my99993_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99998_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="my99994_c" name="my99994_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99998_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99999_c" stoichiometry="2"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="my99995_c" name="my99995_c" reversible="false">
+<notes>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd99999_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="biomass0" name="biomass" reversible="false">
+<notes>
+<html:p>GENE_ASSOCIATION: RSP_0001</html:p>
+<html:p>PROTEIN_ASSOCIATION: </html:p>
+<html:p>SUBSYSTEM: </html:p>
+<html:p>PROTEIN_CLASS: </html:p>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99999_c" stoichiometry="2"/>
+<speciesReference species="cpd99989_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd11416_c" stoichiometry="1"/>
+<speciesReference species="cpd99990_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0.0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="1"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+</listOfReactions>
+</model>
+</sbml>
