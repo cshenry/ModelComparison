@@ -141,7 +141,8 @@ module ModelComparison {
     @optional protcomp_ref pangenome_ref
     */
     typedef structure {
-	list<Model_ref> models;
+	string workspace;
+	list<Model_ref> model_refs;
 	Protcomp_ref protcomp_ref;
 	Pangenome_ref pangenome_ref;
     } ModelComparisonParams;

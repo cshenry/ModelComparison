@@ -23,32 +23,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "models",
+    "workspace",
+    "model_refs",
     "protcomp_ref",
     "pangenome_ref"
 })
 public class ModelComparisonParams {
 
-    @JsonProperty("models")
-    private List<String> models;
+    @JsonProperty("workspace")
+    private java.lang.String workspace;
+    @JsonProperty("model_refs")
+    private List<String> modelRefs;
     @JsonProperty("protcomp_ref")
     private java.lang.String protcompRef;
     @JsonProperty("pangenome_ref")
     private java.lang.String pangenomeRef;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
-    @JsonProperty("models")
-    public List<String> getModels() {
-        return models;
+    @JsonProperty("workspace")
+    public java.lang.String getWorkspace() {
+        return workspace;
     }
 
-    @JsonProperty("models")
-    public void setModels(List<String> models) {
-        this.models = models;
+    @JsonProperty("workspace")
+    public void setWorkspace(java.lang.String workspace) {
+        this.workspace = workspace;
     }
 
-    public ModelComparisonParams withModels(List<String> models) {
-        this.models = models;
+    public ModelComparisonParams withWorkspace(java.lang.String workspace) {
+        this.workspace = workspace;
+        return this;
+    }
+
+    @JsonProperty("model_refs")
+    public List<String> getModelRefs() {
+        return modelRefs;
+    }
+
+    @JsonProperty("model_refs")
+    public void setModelRefs(List<String> modelRefs) {
+        this.modelRefs = modelRefs;
+    }
+
+    public ModelComparisonParams withModelRefs(List<String> modelRefs) {
+        this.modelRefs = modelRefs;
         return this;
     }
 
@@ -94,7 +112,7 @@ public class ModelComparisonParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((("ModelComparisonParams"+" [models=")+ models)+", protcompRef=")+ protcompRef)+", pangenomeRef=")+ pangenomeRef)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("ModelComparisonParams"+" [workspace=")+ workspace)+", modelRefs=")+ modelRefs)+", protcompRef=")+ protcompRef)+", pangenomeRef=")+ pangenomeRef)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -33,7 +33,7 @@ sub get_ws_name {
 
 eval {
     my $obj_name = "testmodel.1";
-    open(SBML,"testmodel.xml");
+    open(SBML,"iRsp1140.xml");
     my @sbml = <SBML>;
     close(SBML);
     chomp @sbml;
@@ -41,7 +41,7 @@ eval {
     $fba_client->import_fbamodel({'workspace'=>get_ws_name(), 'genome'=>'Rhodobacter_sphaeroides_2.4.1', 'genome_workspace'=>'KBaseExampleData', 'model'=>$obj_name, 'biomass'=>'biomass0', 'sbml'=>$sbml});
     my $models = [get_ws_name()."/".$obj_name];
     $obj_name = "testmodel.2";
-    open(SBML,"testmodel2.xml");
+    open(SBML,"iRsp1140-edited.xml");
     @sbml = <SBML>;
     close(SBML);
     chomp @sbml;
@@ -50,9 +50,13 @@ eval {
     push @$models, get_ws_name()."/".$obj_name;
     $@ = '';
     eval { 
-        $impl->compare_models({models=>$models});
+	print "Ready to compare_models\n";
+        my $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name()});
+	print &Dumper($return->{models});
     };
-#    like($@, qr/Error comparing models/);
+    if ($@) {
+	print "Error during compare_models:\n".$@."\n";
+    }
     done_testing(1);
 };
 my $err = undef;

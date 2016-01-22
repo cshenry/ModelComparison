@@ -64,7 +64,8 @@ sub new
 $params is a ModelComparison.ModelComparisonParams
 $return is a ModelComparison.ModelComparisonResult
 ModelComparisonParams is a reference to a hash where the following keys are defined:
-	models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+	workspace has a value which is a string
+	model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 Model_ref is a string
@@ -172,7 +173,8 @@ ModelComparisonBiomassCompound is a reference to a hash where the following keys
 $params is a ModelComparison.ModelComparisonParams
 $return is a ModelComparison.ModelComparisonResult
 ModelComparisonParams is a reference to a hash where the following keys are defined:
-	models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+	workspace has a value which is a string
+	model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 Model_ref is a string
@@ -301,11 +303,420 @@ sub compare_models
     my($return);
     #BEGIN compare_models
 
-    my @model_refs = @{$params->{models}};
-    print "@model_refs\n";
+    if (!exists $params->{'model_refs'}) {
+        die "Parameter model_refs is not set in input arguments";
+    }
+    my @model_refs = @{$params->{model_refs}};
     my $protcomp_ref = $params->{protcomp_ref};
     my $pangenome_ref = $params->{pangenome_ref};
     $return = {};
+
+    if (!exists $params->{'workspace'}) {
+        die "Parameter workspace is not set in input arguments";
+    }
+    my $workspace_name=$params->{'workspace'};
+    my $token=$ctx->token;
+    my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
+
+    my @models;
+    foreach my $model_ref (@model_refs) {
+	my $model=undef;
+	eval {
+	    $model=$wsClient->get_objects([{ref=>$model_ref}])->[0]{data};
+	    $model->{model_ref} = $model_ref;
+	    push @models, $model;
+	};
+	if ($@) {
+	    die "Error loading model from workspace:\n".$@;
+	}
+    }
+
+    my $protcomp;
+    if (defined $protcomp_ref) {
+	eval {
+	    $protcomp=$wsClient->get_objects([{ref=>$protcomp_ref}])->[0]{data};
+	};
+	if ($@) {
+	    die "Error loading protein comparison from workspace:\n".$@;
+	}
+    }
+
+    my $pangenome;
+    if (defined $pangenome_ref) {
+	eval {
+	    $pangenome=$wsClient->get_objects([{ref=>$pangenome_ref}])->[0]{data};
+	};
+	if ($@) {
+	    die "Error loading pangenome from workspace:\n".$@;
+	}
+    }
+
+    print "All data loaded from workspace\n";
+
+    # PREPARE MODEL INFO
+    my %mcpd_refs; # hash from modelcompound_refs to their data
+    my %ftr2model; # hash from gene feature ids to the model they are in
+    my %ftr2reactions;
+
+    foreach my $model (@models) {
+	print "Processing model ", $model->{id}, "\n";
+	foreach my $cmp (@{$model->{modelcompartments}}) {
+	    $model->{cmphash}->{$cmp->{id}} = $cmp;
+	}
+	foreach my $cpd (@{$model->{modelcompounds}}) {
+	    $cpd->{cmpkbid} = pop @{[split "/", $cpd->{modelcompartment_ref}]};
+	    $cpd->{cpdkbid} = pop @{[split "/", $cpd->{compound_ref}]};
+	    if (! defined $cpd->{name}) {
+		$cpd->{name} = $cpd->{id};
+	    }
+	    $cpd->{name} =~ s/_[a-zA-z]\d+$//g;
+	    
+	    $model->{cpdhash}->{$cpd->{id}} = $cpd;
+	    if ($cpd->{cpdkbid} ne "cpd00000") {
+		$model->{cpdhash}->{$cpd->{$cpd->{cpdkbid}."_".$cpd->{cmpkbid}}} = $cpd;
+	    }
+	}
+	foreach my $rxn (@{$model->{modelreactions}}) {
+	    $rxn->{rxnkbid} = pop @{[split "/", $rxn->{reaction_ref}]};
+	    $rxn->{cmpkbid} = pop @{[split "/", $rxn->{modelcompartment_ref}]};
+	    $rxn->{dispid} = $rxn->{id};
+	    $rxn->{dispid} =~ s/_[a-zA-z]\d+$//g;
+	    $rxn->{dispid} .= "[".$rxn->{cmpkbid}."]";
+	    if ($rxn->{name} eq "CustomReaction") {
+		$rxn->{name} = $rxn->{id};
+	    }
+	    $rxn->{name} =~ s/_[a-zA-z]\d+$//g;
+	    $model->{rxnhash}->{$rxn->{id}} = $rxn;
+	    if ($rxn->{rxnkbid} ne "rxn00000") {
+		$model->{rxnhash}->{$rxn->{rxnkbid}."_".$rxn->{cmpkbid}} = $rxn;
+		if ($rxn->{rxnkbid}."_".$rxn->{cmpkbid} ne $rxn->{id}) {
+		    $rxn->{dispid} .= "<br>(".$rxn->{rxnkbid}.")";
+		}
+	    }
+	    my $reactants = "";
+	    my $products = "";
+	    my $sign = "<=>";
+	    if ($rxn->{direction} eq ">") {
+		$sign = "=>";
+	    } elsif ($rxn->{direction} eq "<") {
+		$sign = "<=";
+	    }
+	    foreach my $rgt (@{$rxn->{modelReactionReagents}}) {
+		$rgt->{cpdkbid} = pop @{[split "/", $rgt->{modelcompound_ref}]};
+		$mcpd_refs{$rgt->{modelcompound_ref}} = $model->{cpdhash}->{$rgt->{cpdkbid}}; # keep track of model compound refs
+		if ($rgt->{coefficient} < 0) {
+		    if ($reactants ne "") {
+			$reactants .= " + ";
+		    }
+		    if ($rgt->{coefficient} != -1) {
+			my $abscoef = int(-1*100*$rgt->{coefficient})/100;
+			$reactants .= "(".$abscoef.") ";
+		    }
+		    $reactants .= $model->{cpdhash}->{$rgt->{cpdkbid}}->{name}."[".$model->{cpdhash}->{$rgt->{cpdkbid}}->{cmpkbid}."]";
+		} else {
+		    if ($products ne "") {
+			$products .= " + ";
+		    }
+		    if ($rgt->{coefficient} != 1) {
+			my $abscoef = int(100*$rgt->{coefficient})/100;
+			$products .= "(".$abscoef.") ";
+		    }
+		    $products .= $model->{cpdhash}->{$rgt->{cpdkbid}}->{name}."[".$model->{cpdhash}->{$rgt->{cpdkbid}}->{cmpkbid}."]";
+		}
+	    }
+	    $rxn->{ftrhash} = {};
+	    foreach my $prot (@{$rxn->{modelReactionProteins}}) {
+		foreach my $subunit (@{$prot->{modelReactionProteinSubunits}}) {
+		    foreach my $feature (@{$subunit->{feature_refs}}) {
+			my $ef = pop @{[split "/", $feature]};
+			$rxn->{ftrhash}->{$ef} = 1;
+			$ftr2model{$ef} = $model->{id};
+			push @{$ftr2reactions{$ef}}, $rxn->{id};
+		    }
+		}
+	    }
+	    $rxn->{dispfeatures} = "";
+	    foreach my $gene (keys %{$rxn->{ftrhash}}) {
+		if ($rxn->{dispfeatures} ne "") {
+		    $rxn->{dispfeatures} .= "<br>";
+		}
+		$rxn->{dispfeatures} .= $gene;
+	    }
+	    $rxn->{equation} = $reactants." ".$sign." ".$products;
+	}
+    }
+    
+    # PREPARE FEATURE COMPARISONS
+    my $gene_translation;
+    my %model2family;
+    my %ftr2family;
+    my $mc_families = {};
+    my $core_families = 0;
+
+    if (defined $protcomp) {
+	my $i = 0;
+	foreach my $ftr (@{$protcomp->{proteome1names}}) {
+	    foreach my $hit (@{$protcomp->{data1}->[$i]}) {
+		push @{$gene_translation->{$ftr}}, $protcomp->{proteome2names}->[$hit->[0]];
+	    }
+	    $i++;
+	}
+        $i = 0;
+	foreach my $ftr (@{$protcomp->{proteome2names}}) {
+	    foreach my $hit (@{$protcomp->{data2}->[$i]}) {
+		push @{$gene_translation->{$ftr}}, $protcomp->{proteome1names}->[$hit->[0]];
+	    }
+	    $i++;
+	}
+    }
+    elsif (defined $pangenome) {
+	foreach my $family (@{$pangenome->{orthologs}}) {
+	    my $num_models = 0;
+	    my $family_model_data;
+	    foreach my $ortholog (@{$family->{orthologs}}) {
+		$ftr2family{$ortholog->[0]} = $family;
+		map { push @{$gene_translation->{$ortholog->[0]}}, $_->[0] } @{$family->{orthologs}};
+		if (exists $ftr2model{$ortholog->[0]}) {
+		    $num_models++;
+		    push @{$family_model_data->{$ftr2model{$ortholog->[0]}}}, $ftr2reactions{$ortholog->[0]};
+		    $model2family{$ftr2model{$ortholog->[0]}}->{$family->{id}} = 1;
+		}
+	    }
+	    my $mc_family = {
+		family_id => $family->{id},
+		function => $family->{function},
+		number_models => $num_models,
+		fraction_models => $num_models*1.0/@models,
+		core => ($num_models == @models),
+		family_model_data => $family_model_data
+	    };
+	    $mc_families->{$family->{id}} = $mc_family;
+	    $core_families++ if ($num_models == @models);
+	}
+    }
+
+    # READY TO COMPARE
+    
+    my $mc_models;
+    my $mc_reactions;
+    my $mc_compounds;
+    my $mc_bcpds;
+
+    foreach my $model1 (@models) {
+	my $mc_model = {};
+	push @{$mc_models}, $mc_model;
+	$mc_model->{id} = $model1->{id};
+	$mc_model->{model_ref} = $model1->{model_ref};
+	$mc_model->{genome_ref} = $model1->{genome_ref};
+
+	eval {
+	    my $genome=$wsClient->get_objects([{ref=>$model1->{genome_ref}}])->[0]{data};
+	    $mc_model->{name} = $genome->{scientific_name};
+	    $mc_model->{taxonomy} = $genome->{taxonomy};
+	};
+	if ($@) {
+	    warn "Error loading genome from workspace:\n".$@;
+	}
+
+	$mc_model->{reactions} = scalar @{$model1->{modelreactions}};
+	$mc_model->{compounds} = scalar @{$model1->{modelcompounds}};
+	$mc_model->{biomasses} = scalar @{$model1->{biomasses}};
+
+	foreach my $model2 (@models) {
+	    next if $model1->{id} eq $model2->{id};		    
+	    $mc_model->{model_similarity}->{$model2->{id}} = [0,0,0,0,0];
+	}
+
+	foreach my $rxn (@{$model1->{modelreactions}}) {
+	    my $ftrs = [];
+	    if (defined $pangenome) {
+		foreach my $ftr (keys %{$rxn->{ftrhash}}) {
+		    my $family = $ftr2family{$ftr};
+		    my $conservation = 0;
+		    foreach my $model (@models) {
+			$conservation++ if exists $model2family{$model}->{$family->{id}};
+		    }
+		    $ftrs = [$ftr, $family->{id}, $conservation*1.0/@models, 0];
+		}
+	    }
+	    my $mc_reaction = $mc_reactions->{$rxn->{id}};
+	    if (! defined $mc_reaction) {
+		$mc_reaction = {
+		    id => $rxn->{id},
+		    reaction_ref => $rxn->{reaction_ref},
+		    name => $rxn->{name},
+		    equation => $rxn->{equation},
+		    number_models => 1,
+		    core => 0
+		};
+		$mc_reactions->{$mc_reaction->{id}} = $mc_reaction;
+	    } else {
+		$mc_reaction->{number_models}++;
+	    }
+	    $mc_reaction->{reaction_model_data}->{$model1->{id}} = [1,$rxn->{direction},[$ftrs],$rxn->{dispfeatures}];
+	    foreach my $model2 (@models) {
+		next if $model1->{id} eq $model2->{id};
+
+		my $model2_ftrs;
+		if ($rxn->{rxnkbid} =~ "rxn00000" && defined $model2->{rxnhash}->{$rxn->{id}}) {
+		    $mc_model->{model_similarity}->{$model2->{id}}->[0]++;
+		    $model2_ftrs = $model2->{rxnhash}->{$rxn->{id}}->{ftrhash};
+		}
+		elsif (defined $model2->{rxnhash}->{$rxn->{rxnkbid}."_".$rxn->{cmpkbid}}) {
+		    $mc_model->{model_similarity}->{$model2->{id}}->[0]++;
+		    $model2_ftrs = $model2->{rxnhash}->{$rxn->{rxnkbid}."_".$rxn->{cmpkbid}}->{ftrhash};
+		}
+
+		my $gpr_matched = 1;
+		foreach my $ftr (keys %{$rxn->{ftrhash}}) {
+		    my $found_a_match = 0;
+		    foreach my $gene (@{$gene_translation->{ftr}}) {
+			if ($ftr2model{$gene} eq $model2->{id}) {
+			    $found_a_match = 1;
+			    last;
+			}
+		    }
+		    $gpr_matched = 0 if ($found_a_match == 0);
+		}
+		if ($gpr_matched == 1) {
+		    foreach my $ftr (keys %{$model2_ftrs}) {
+			my $found_a_match = 0;
+			foreach my $gene (@{$gene_translation->{ftr}}) {
+			    if ($ftr2model{$gene} eq $model1->{id}) {
+				$found_a_match = 1;
+				last;
+			    }
+			}
+			$gpr_matched = 0 if ($found_a_match == 0);
+		    }
+		}
+		if ($gpr_matched == 1) {
+		    $mc_model->{model_similarity}->{$model2->{id}}->[4]++;
+		}
+	    }
+	}
+	foreach my $cpd (@{$model1->{modelcompounds}}) {
+	    my $match_id = $cpd->{cpdkbid};
+	    if ($match_id =~ "cpd00000") {
+		$match_id = $cpd->{id};
+		$match_id =~ s/_[a-zA-z]\d+$//g;
+	    }
+	    my $mc_compound = $mc_compounds->{$match_id};
+	    if (! defined $mc_compound) {
+		$mc_compound = {
+		    id => $match_id,
+		    compound_ref => $cpd->{compound_ref},
+		    name => $cpd->{name},
+		    number_models => 1,
+		    core => 0,
+		    model_compound_compartments => { $model1->{id} => [[$cpd->{modelcompartment_ref},$cpd->{charge}]] }
+		};
+		$mc_compounds->{$mc_compound->{id}} = $mc_compound;
+	    } else {
+		$mc_compound->{number_models}++;
+		push @{$mc_compound->{model_compound_compartments}->{$model1->{id}}}, [$cpd->{modelcompartment_ref},$cpd->{charge}];
+	    }
+	    foreach my $model2 (@models) {
+		next if $model1->{id} eq $model2->{id};
+
+		if (($cpd->{cpdkbid} =~ "cpd00000" && defined $model2->{cpdhash}->{$cpd->{id}}) ||
+		    (defined $model2->{cpdhash}->{$cpd->{cpdkbid}."_".$cpd->{cmpkbid}})) {
+		    $mc_model->{model_similarity}->{$model2->{id}}->[1]++;
+		}
+		else {
+		    print STDERR $model1->{id}, ":", $cpd->{id}, " [", $cpd->{cpdkbid}, "] not matched\n";
+		}
+	    }
+	}
+	my %model1bcpds;
+	foreach my $biomass (@{$model1->{biomasses}}) {
+	    foreach my $bcpd (@{$biomass->{biomasscompounds}}) {
+		my $cpd = $mcpd_refs{$bcpd->{modelcompound_ref}};
+		my $match_id = $cpd->{cpdkbid};
+		if ($match_id =~ "cpd00000") {
+		    $match_id = $cpd->{id};
+		    $match_id =~ s/_[a-zA-z]\d+$//g;
+		}
+		$model1bcpds{$match_id} = 0;
+		my $mc_bcpd = $mc_bcpds->{$match_id};
+		if (! defined $mc_bcpd) {
+		    $mc_bcpd = {
+			id => $match_id,
+			compound_ref => $cpd->{compound_ref},
+			name => $cpd->{name},
+			number_models => 1,
+			core => 0,
+			model_biomass_compounds => { $model1->{id} => [[$cpd->{modelcompartment_ref},$bcpd->{coefficient}]] }
+		    };
+		    $mc_bcpds->{$mc_bcpd->{id}} = $mc_bcpd;
+		} else {
+		    $mc_bcpd->{number_models}++;
+		    push @{$mc_bcpd->{model_biomass_compounds}->{$model1->{id}}}, [$cpd->{modelcompartment_ref},$bcpd->{coefficient}];
+		}
+		foreach my $model2 (@models) {
+		    next if $model1->{id} eq $model2->{id};
+
+		    if (($cpd->{cpdkbid} =~ "cpd00000" && defined $model2->{cpdhash}->{$cpd->{id}}) ||
+			(defined $model2->{cpdhash}->{$cpd->{cpdkbid}."_".$cpd->{cmpkbid}})) {
+			$mc_model->{model_similarity}->{$model2->{id}}->[2]++;
+		    }
+		    else {
+			print STDERR $model1->{id}, ":", $cpd->{id}, " [", $cpd->{cpdkbid}, "] biomass not matched\n";
+		    }
+		}
+	    }
+	}
+	$mc_model->{biomasscpds} = scalar keys %model1bcpds;
+
+	foreach my $family (keys %{$model2family{$model1->{id}}}) {
+	    foreach my $model2 (@models) {
+		next if $model1->{id} eq $model2->{id};
+
+		if (exists $model2family{$model2->{id}}->{$family}) {
+		    $mc_model->{model_similarity}->{$model2->{id}}->[3]++;
+		}
+	    }
+	}
+    }
+
+    # need to set 'core' and 'fraction_models'
+    my $core_reactions = 0;
+    foreach my $mc_reaction (values %$mc_reactions) {
+	if ($mc_reaction->{number_models} == @models) {
+	    $core_reactions++;
+	    $mc_reaction->{core} = 1;
+	}
+	$mc_reaction->{fraction_models} = 1.0*$mc_reaction->{number_models}/@models;
+    }
+
+    my $core_compounds = 0;
+    foreach my $mc_compound (values %$mc_compounds) {
+	if ($mc_compound->{number_models} == @models) {
+	    $core_compounds++;
+	    $mc_compound->{core} = 1;
+	}
+	$mc_compound->{fraction_models} = 1.0*$mc_compound->{number_models}/@models;
+    }
+
+    my $core_bcpds = 0;
+    foreach my $mc_bcpd (values %$mc_bcpds) {
+	if ($mc_bcpd->{number_models} == @models) {
+	    $core_bcpds++;
+	    $mc_bcpd->{core} = 1;
+	}
+	$mc_bcpd->{fraction_models} = 1.0*$mc_bcpd->{number_models}/@models;
+    }
+
+    $return->{models} = $mc_models;
+    $return->{reactions} = [values %$mc_reactions];
+    $return->{core_reactions} = $core_reactions;
+    $return->{compounds} = [values %$mc_compounds];
+    $return->{core_compounds} = $core_compounds;
+    $return->{biomasscpds} = [values %$mc_bcpds];
+    $return->{core_biomass_compounds} = $core_bcpds;
+    $return->{core_families} = $core_families;
+    $return->{families} = [values %$mc_families];
+
     #END compare_models
     my @_bad_returns;
     (ref($return) eq 'HASH') or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
@@ -1018,7 +1429,8 @@ ModelComparisonParams object: a list of models and optional pangenome and protei
 
 <pre>
 a reference to a hash where the following keys are defined:
-models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+workspace has a value which is a string
+model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 
@@ -1029,7 +1441,8 @@ pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 =begin text
 
 a reference to a hash where the following keys are defined:
-models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+workspace has a value which is a string
+model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 

@@ -123,7 +123,8 @@ sub new
 $params is a ModelComparison.ModelComparisonParams
 $return is a ModelComparison.ModelComparisonResult
 ModelComparisonParams is a reference to a hash where the following keys are defined:
-	models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+	workspace has a value which is a string
+	model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 Model_ref is a string
@@ -231,7 +232,8 @@ ModelComparisonBiomassCompound is a reference to a hash where the following keys
 $params is a ModelComparison.ModelComparisonParams
 $return is a ModelComparison.ModelComparisonResult
 ModelComparisonParams is a reference to a hash where the following keys are defined:
-	models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+	workspace has a value which is a string
+	model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 Model_ref is a string
@@ -1105,7 +1107,8 @@ ModelComparisonParams object: a list of models and optional pangenome and protei
 
 <pre>
 a reference to a hash where the following keys are defined:
-models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+workspace has a value which is a string
+model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 
@@ -1116,7 +1119,8 @@ pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 =begin text
 
 a reference to a hash where the following keys are defined:
-models has a value which is a reference to a list where each element is a ModelComparison.Model_ref
+workspace has a value which is a string
+model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 
