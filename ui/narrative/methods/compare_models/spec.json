@@ -12,26 +12,36 @@
     },
     "parameters": [ 
         {
-            "id": "contigset_id",
+            "id": "model_ref",
             "optional": false,
             "advanced": false,
-            "allow_multiple": false,
+            "allow_multiple": true,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "valid_ws_types": [ "KBaseGenomes.ContigSet" ]
+                "valid_ws_types": [ "KBaseFBA.FBAModel" ]
             }
         },
         {
-            "id": "min_length",
-            "optional": false,
+            "id": "protcomp_ref",
+            "optional": true,
             "advanced": false,
             "allow_multiple": false,
             "default_values": [ "" ],
             "field_type": "text",
             "text_options": {
-                "validate_as": "int",
-                "min_integer" : 0
+                "valid_ws_types": [ "GenomeComparison.ProteomeComparison" ]
+            }
+        },
+        {
+            "id": "pangenome_ref",
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "valid_ws_types": [ "KBaseGenomes.Pangenome" ]
             }
         }
     ],
@@ -39,33 +49,29 @@
         "service-mapping": {
             "url": "",
             "name": "ModelComparison",
-            "method": "filter_contigs",
+            "method": "compare_models",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace"
                 },
                 {
-                    "input_parameter": "contigset_id",
-                    "target_property": "contigset_id"
+                    "input_parameter": "model_ref",
+                    "target_property": "model_refs"
                 },
                 {
-                    "input_parameter": "min_length",
-                    "target_property": "min_length"
+                    "input_parameter": "protcomp_ref",
+                    "target_property": "protcomp_ref"
+                },
+                {
+                    "input_parameter": "pangenome_ref",
+                    "target_property": "pangenome_ref"
                 }
             ],
             "output_mapping": [
                 {
                     "service_method_output_path": [0],
-                    "target_property": "contig_filter_result"
-                },
-                {
-                    "input_parameter": "contigset_id",
-                    "target_property": "input_contigset_id"
-                },
-                {
-                    "input_parameter": "min_length",
-                    "target_property": "input_min_length"
+                    "target_property": "compare_models_result"
                 },
                 {
                     "narrative_system_variable": "workspace",
