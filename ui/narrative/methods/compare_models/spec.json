@@ -57,15 +57,18 @@
                 },
                 {
                     "input_parameter": "model_ref",
-                    "target_property": "model_refs"
+                    "target_property": "model_refs",
+                    "target_type_transform": "list<ref>"
                 },
                 {
                     "input_parameter": "protcomp_ref",
-                    "target_property": "protcomp_ref"
+                    "target_property": "protcomp_ref",
+                    "target_type_transform": "ref"
                 },
                 {
                     "input_parameter": "pangenome_ref",
-                    "target_property": "pangenome_ref"
+                    "target_property": "pangenome_ref",
+                    "target_type_transform": "ref"
                 }
             ],
             "output_mapping": [
