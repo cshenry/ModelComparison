@@ -431,7 +431,7 @@ sub compare_models
 			my $ef = pop @{[split "/", $feature]};
 			$rxn->{ftrhash}->{$ef} = 1;
 			$ftr2model{$ef}->{$model->{id}} = 1;
-			push @{$ftr2reactions{$ef}}, $rxn->{id};
+			$ftr2reactions{$ef}->{$rxn->{id}} = 1;
 		    }
 		}
 	    }
@@ -471,15 +471,16 @@ sub compare_models
     }
     elsif (defined $pangenome) {
 	foreach my $family (@{$pangenome->{orthologs}}) {
-	    my $num_models = 0;
+	    my $in_models = {};
 	    my $family_model_data = {};
 	    foreach my $ortholog (@{$family->{orthologs}}) {
 		$ftr2family{$ortholog->[0]} = $family;
 		map { $gene_translation->{$ortholog->[0]}->{$_->[0]} = 1 } @{$family->{orthologs}};
 		foreach my $model (@models) {
 		    if (exists $ftr2model{$ortholog->[0]}->{$model->{id}}) {
-			$num_models++;
-			push @{$family_model_data->{$model->{id}}}, [1, $ftr2reactions{$ortholog->[0]}];
+			$in_models->{$model->{id}} = 1;
+			my @reactions = keys $ftr2reactions{$ortholog->[0]};
+			push @{$family_model_data->{$model->{id}}}, [1, \@reactions];
 			push @{$model2family{$model->{id}}->{$family->{id}}}, $ortholog->[0];
 		    }
 		    else {
@@ -487,6 +488,7 @@ sub compare_models
 		    }
 		}
 	    }
+	    my $num_models = scalar keys %$in_models;
 	    my $mc_family = {
 		family_id => $family->{id},
 		function => $family->{function},

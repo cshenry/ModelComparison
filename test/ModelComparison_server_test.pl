@@ -114,7 +114,7 @@ eval {
     }
     $m1m2sim = $return->{models}->[0]->{model_similarity}->{'testmodel.2'};
     ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 1 && $m1m2sim->[4] == 1, "model similarity with pangenome OK");
-
+    print &Dumper($return);
     done_testing(2);
 };
 my $err = undef;
