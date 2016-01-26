@@ -33,7 +33,7 @@ sub get_ws_name {
 
 eval {
     my $obj_name = "testmodel.1";
-    open(SBML,"iRsp1140.xml");
+    open(SBML,"testmodel.xml");
     my @sbml = <SBML>;
     close(SBML);
     chomp @sbml;
@@ -41,18 +41,40 @@ eval {
     $fba_client->import_fbamodel({'workspace'=>get_ws_name(), 'genome'=>'Rhodobacter_sphaeroides_2.4.1', 'genome_workspace'=>'KBaseExampleData', 'model'=>$obj_name, 'biomass'=>'biomass0', 'sbml'=>$sbml});
     my $models = [get_ws_name()."/".$obj_name];
     $obj_name = "testmodel.2";
-    open(SBML,"iRsp1140-edited.xml");
+    open(SBML,"testmodel2.xml");
     @sbml = <SBML>;
     close(SBML);
     chomp @sbml;
     $sbml = join "", @sbml;
     $fba_client->import_fbamodel({'workspace'=>get_ws_name(), 'genome'=>'Rhodobacter_sphaeroides_2.4.1', 'genome_workspace'=>'KBaseExampleData', 'model'=>$obj_name, 'biomass'=>'biomass0', 'sbml'=>$sbml});
     push @$models, get_ws_name()."/".$obj_name;
+    $obj_name = "protcomp.1";
+    my $protcomp = {
+	id => 1,
+	genome1ref => 'KBaseExampleData/Rhodobacter_sphaeroides_2.4.1',
+	genome2ref => 'KBaseExampleData/Rhodobacter_sphaeroides_2.4.1',
+	proteome1names => ['RSP_0723','RSP_1012','RSP_4032'],
+	proteome2names => ['RSP_0723','RSP_1012','RSP_4032'],
+	proteome1map => {},
+	proteome2map => {},
+	data1 => [[[0,0,0]],[[1,1,1]],[[2,2,2]]],
+	data2 => [[[0,0,0]],[[1,1,1]],[[2,2,2]]],
+	sub_bbh_percent => 0,
+	max_evalue => "0"
+    };
+    $ws_client->save_objects({
+	'workspace' => get_ws_name(),
+	'objects' => [{
+	    type => 'GenomeComparison.ProteomeComparison',
+	    name => $obj_name,
+	    data => $protcomp
+		      }]
+			    });
     $@ = '';
     eval { 
 	print "Ready to compare_models\n";
-        my $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name()});
-	print &Dumper($return->{models});
+        my $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$obj_name});
+	print &Dumper($return);
     };
     if ($@) {
 	print "Error during compare_models:\n".$@."\n";

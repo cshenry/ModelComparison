@@ -15,7 +15,31 @@
 <compartment id="e" name="Extracellular_0" />
 </listOfCompartments>
 <listOfSpecies>
-<species id="cpd00089_c" name="ACP_c" compartment="c" charge="-2" boundaryCondition="false">
+<species id="cpd00051_c" name="L_Arginine" compartment="c" boundaryCondition="false">
+	<notes>
+		<body xmlns="http://www.w3.org/1999/xhtml">
+			<p>FORMULA: C6H15N4O2</p>
+			<p>CHARGE: 1</p>
+		</body>
+	</notes>
+</species>
+<species id="cpd00067_c" name="H" compartment="c" boundaryCondition="false">
+	<notes>
+		<body xmlns="http://www.w3.org/1999/xhtml">
+			<p>FORMULA: H</p>
+			<p>CHARGE: 1</p>
+		</body>
+	</notes>
+</species>
+<species id="cpd00007_c" name="O2" compartment="c" charge="-2" boundaryCondition="false">
+  <notes>
+    <body xmlns="http://www.w3.org/1999/xhtml">
+      <p>FORMULA: O2</p>
+      <p>CHARGE: 0</p>
+    </body>
+  </notes>
+</species>
+<species id="cpd99989_c" name="ACP_c" compartment="c" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -23,7 +47,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00090_c" name="Apo-ACP_c" compartment="c" charge="-2" boundaryCondition="false">
+<species id="cpd99990_c" name="Apo-ACP_c" compartment="c" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -31,7 +55,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00096_e" name="A_e" compartment="e" charge="-2" boundaryCondition="false">
+<species id="cpd99996_e" name="A_e" compartment="e" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -39,7 +63,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00096_c" name="A_c" compartment="c" charge="-2" boundaryCondition="false">
+<species id="cpd99996_c" name="A_c" compartment="c" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -47,7 +71,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00097_c" name="B_c" compartment="c" charge="-2" boundaryCondition="false">
+<species id="cpd99997_c" name="B_c" compartment="c" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -55,7 +79,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00097_e" name="B_e" compartment="e" charge="-2" boundaryCondition="false">
+<species id="cpd99997_e" name="B_e" compartment="e" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -63,7 +87,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00098_c" name="C_c" compartment="c" charge="-2" boundaryCondition="false">
+<species id="cpd99998_c" name="C_c" compartment="c" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -71,15 +95,7 @@
     </body>
   </notes>
 </species>
-<species id="cpd00099_c" name="D_c" compartment="c" charge="-2" boundaryCondition="false">
-  <notes>
-    <body xmlns="http://www.w3.org/1999/xhtml">
-      <p>FORMULA: C</p>
-      <p>CHARGE: -2</p>
-    </body>
-  </notes>
-</species>
-<species id="cpd00009_c" name="E_c" compartment="c" charge="-2" boundaryCondition="false">
+<species id="cpd99999_c" name="D_c" compartment="c" charge="-2" boundaryCondition="false">
   <notes>
     <body xmlns="http://www.w3.org/1999/xhtml">
       <p>FORMULA: C</p>
@@ -91,14 +107,14 @@
 </species>
 </listOfSpecies>
 <listOfReactions>
-<reaction id="rxn00090_c" name="rxn00090_c" reversible="false">
+<reaction id="my99991_c" name="my99991_c" reversible="false">
 <notes>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00090_c" stoichiometry="1"/>
+<speciesReference species="cpd99996_e" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
-<speciesReference species="cpd00089_c" stoichiometry="1"/>
+<speciesReference species="cpd99996_c" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -112,14 +128,14 @@
 	</listOfParameters>
 </kineticLaw>
 </reaction>
-<reaction id="rxn00091_c" name="rxn00091_c" reversible="false">
+<reaction id="my99992_c" name="my99992_c" reversible="false">
 <notes>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00096_e" stoichiometry="1"/>
+<speciesReference species="cpd99996_c" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
-<speciesReference species="cpd00096_c" stoichiometry="1"/>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -133,14 +149,14 @@
 	</listOfParameters>
 </kineticLaw>
 </reaction>
-<reaction id="rxn00092_c" name="rxn00092_c" reversible="false">
+<reaction id="my99997_c" name="my99997_c" reversible="false">
 <notes>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00096_c" stoichiometry="1"/>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
-<speciesReference species="cpd00097_c" stoichiometry="1"/>
+<speciesReference species="cpd99997_e" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -154,14 +170,14 @@
 	</listOfParameters>
 </kineticLaw>
 </reaction>
-<reaction id="rxn00097_c" name="rxn00097_c" reversible="false">
+<reaction id="my99993_c" name="my99993_c" reversible="false">
 <notes>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00097_c" stoichiometry="1"/>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
-<speciesReference species="cpd00097_e" stoichiometry="1"/>
+<speciesReference species="cpd99998_c" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -175,14 +191,16 @@
 	</listOfParameters>
 </kineticLaw>
 </reaction>
-<reaction id="rxn00093_c" name="rxn00093_c" reversible="false">
+<reaction id="my99994_c" name="my99994_c" reversible="false">
 <notes>
+			<html:p>GENE_ASSOCIATION: RSP_0723</html:p>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00097_c" stoichiometry="1"/>
+<speciesReference species="cpd99998_c" stoichiometry="1"/>
+<speciesReference species="cpd00067_c" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
-<speciesReference species="cpd00098_c" stoichiometry="1"/>
+<speciesReference species="cpd99999_c" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -196,14 +214,16 @@
 	</listOfParameters>
 </kineticLaw>
 </reaction>
-<reaction id="rxn00004_c" name="rxn00004_c" reversible="false">
+<reaction id="my99995_c" name="my99995_c" reversible="false">
 <notes>
+			<html:p>GENE_ASSOCIATION: RSP_1012 or RSP_4032</html:p>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00098_c" stoichiometry="1"/>
+<speciesReference species="cpd99997_c" stoichiometry="1"/>
+<speciesReference species="cpd00051_c" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
-<speciesReference species="cpd00009_c" stoichiometry="2"/>
+<speciesReference species="cpd99999_c" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -217,41 +237,48 @@
 	</listOfParameters>
 </kineticLaw>
 </reaction>
-<reaction id="rxn00095_c" name="rxn00095_c" reversible="false">
+<reaction id="biomass0" name="biomass no oxygen" reversible="false">
 <notes>
-</notes>
-<listOfReactants>
-<speciesReference species="cpd00097_c" stoichiometry="1"/>
-</listOfReactants>
-<listOfProducts>
-<speciesReference species="cpd00099_c" stoichiometry="1"/>
-</listOfProducts>
-<kineticLaw>
-	<math xmlns="http://www.w3.org/1998/Math/MathML">
-			<ci> FLUX_VALUE </ci>
-	</math>
-	<listOfParameters>
-		<parameter id="LOWER_BOUND" value="0" name="mmol_per_gDW_per_hr"/>
-		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
-		<parameter id="OBJECTIVE_COEFFICIENT" value="0"/>
-		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
-	</listOfParameters>
-</kineticLaw>
-</reaction>
-<reaction id="biomass0" name="biomass" reversible="false">
-<notes>
-<html:p>GENE_ASSOCIATION: RSP_0001</html:p>
+<html:p>GENE_ASSOCIATION: </html:p>
 <html:p>PROTEIN_ASSOCIATION: </html:p>
 <html:p>SUBSYSTEM: </html:p>
 <html:p>PROTEIN_CLASS: </html:p>
 </notes>
 <listOfReactants>
-<speciesReference species="cpd00009_c" stoichiometry="2"/>
-<speciesReference species="cpd00089_c" stoichiometry="1"/>
+<speciesReference species="cpd99999_c" stoichiometry="2"/>
+<speciesReference species="cpd99989_c" stoichiometry="1"/>
 </listOfReactants>
 <listOfProducts>
 <speciesReference species="cpd11416_c" stoichiometry="1"/>
-<speciesReference species="cpd00090_c" stoichiometry="1"/>
+<speciesReference species="cpd99990_c" stoichiometry="1"/>
+</listOfProducts>
+<kineticLaw>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+			<ci> FLUX_VALUE </ci>
+	</math>
+	<listOfParameters>
+		<parameter id="LOWER_BOUND" value="0.0" name="mmol_per_gDW_per_hr"/>
+		<parameter id="UPPER_BOUND" value="100" name="mmol_per_gDW_per_hr"/>
+		<parameter id="OBJECTIVE_COEFFICIENT" value="1"/>
+		<parameter id="FLUX_VALUE" value="0.0" name="mmol_per_gDW_per_hr"/>
+	</listOfParameters>
+</kineticLaw>
+</reaction>
+<reaction id="biomass1" name="biomass oxygen" reversible="false">
+<notes>
+<html:p>GENE_ASSOCIATION: </html:p>
+<html:p>PROTEIN_ASSOCIATION: </html:p>
+<html:p>SUBSYSTEM: </html:p>
+<html:p>PROTEIN_CLASS: </html:p>
+</notes>
+<listOfReactants>
+<speciesReference species="cpd99999_c" stoichiometry="2"/>
+<speciesReference species="cpd99989_c" stoichiometry="1"/>
+<speciesReference species="cpd00007_c" stoichiometry="1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference species="cpd11416_c" stoichiometry="1"/>
+<speciesReference species="cpd99990_c" stoichiometry="1"/>
 </listOfProducts>
 <kineticLaw>
 	<math xmlns="http://www.w3.org/1998/Math/MathML">

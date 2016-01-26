@@ -355,7 +355,7 @@ sub compare_models
 
     # PREPARE MODEL INFO
     my %mcpd_refs; # hash from modelcompound_refs to their data
-    my %ftr2model; # hash from gene feature ids to the model they are in
+    my %ftr2model; # hash from gene feature ids to the models they are in
     my %ftr2reactions;
 
     foreach my $model (@models) {
@@ -430,7 +430,7 @@ sub compare_models
 		    foreach my $feature (@{$subunit->{feature_refs}}) {
 			my $ef = pop @{[split "/", $feature]};
 			$rxn->{ftrhash}->{$ef} = 1;
-			$ftr2model{$ef} = $model->{id};
+			$ftr2model{$ef}->{$model->{id}} = 1;
 			push @{$ftr2reactions{$ef}}, $rxn->{id};
 		    }
 		}
@@ -457,14 +457,14 @@ sub compare_models
 	my $i = 0;
 	foreach my $ftr (@{$protcomp->{proteome1names}}) {
 	    foreach my $hit (@{$protcomp->{data1}->[$i]}) {
-		push @{$gene_translation->{$ftr}}, $protcomp->{proteome2names}->[$hit->[0]];
+		$gene_translation->{$ftr}->{$protcomp->{proteome2names}->[$hit->[0]]} = 1;
 	    }
 	    $i++;
 	}
         $i = 0;
 	foreach my $ftr (@{$protcomp->{proteome2names}}) {
 	    foreach my $hit (@{$protcomp->{data2}->[$i]}) {
-		push @{$gene_translation->{$ftr}}, $protcomp->{proteome1names}->[$hit->[0]];
+		$gene_translation->{$ftr}->{$protcomp->{proteome1names}->[$hit->[0]]} = 1;
 	    }
 	    $i++;
 	}
@@ -475,11 +475,11 @@ sub compare_models
 	    my $family_model_data;
 	    foreach my $ortholog (@{$family->{orthologs}}) {
 		$ftr2family{$ortholog->[0]} = $family;
-		map { push @{$gene_translation->{$ortholog->[0]}}, $_->[0] } @{$family->{orthologs}};
+		map { $gene_translation->{$ortholog->[0]}->{$_->[0]} = 1 } @{$family->{orthologs}};
 		if (exists $ftr2model{$ortholog->[0]}) {
 		    $num_models++;
-		    push @{$family_model_data->{$ftr2model{$ortholog->[0]}}}, $ftr2reactions{$ortholog->[0]};
-		    $model2family{$ftr2model{$ortholog->[0]}}->{$family->{id}} = 1;
+		    map { push @{$family_model_data->{$_}}, $ftr2reactions{$ortholog->[0]} } keys %{$ftr2model{$ortholog->[0]}};
+		    map { push @{$model2family{$_}->{$family->{id}}}, $ortholog->[0] } keys %{$ftr2model{$ortholog->[0]}};
 		}
 	    }
 	    my $mc_family = {
@@ -492,6 +492,17 @@ sub compare_models
 	    };
 	    $mc_families->{$family->{id}} = $mc_family;
 	    $core_families++ if ($num_models == @models);
+	}
+    }
+
+    # ACCUMULATE REACTIONS AND FAMILIES
+    my %rxn2families;
+
+    foreach my $model (@models) {
+	foreach my $rxnid (keys %{$model->{rxnhash}}) {
+	    foreach my $ftr (keys %{$model->{$rxnid}->{ftrhash}}) {
+		$rxn2families{$rxnid}->{$ftr2family{$ftr}->{id}} = $ftr2family{$ftr};
+	    }
 	}
     }
 
@@ -533,10 +544,20 @@ sub compare_models
 		foreach my $ftr (keys %{$rxn->{ftrhash}}) {
 		    my $family = $ftr2family{$ftr};
 		    my $conservation = 0;
-		    foreach my $model (@models) {
-			$conservation++ if exists $model2family{$model}->{$family->{id}};
+		    foreach my $m (keys %model2family) {
+			$conservation++ if exists $model2family{$m}->{$family->{id}};
 		    }
-		    $ftrs = [$ftr, $family->{id}, $conservation*1.0/@models, 0];
+		    push @$ftrs, [$ftr, $family->{id}, $conservation*1.0/@models, 0];
+		}
+		# maybe families associated with reaction aren't in model
+		foreach my $familyid (keys %{$rxn2families{$rxn->{id}}}) {
+		    if (! exists $model2family{$model1->{id}}->{$familyid}) {
+			my $conservation = 0;
+			foreach my $m (keys %model2family) {
+			    $conservation++ if exists $model2family{$m}->{$familyid};
+			}
+			push @$ftrs, ["", $familyid, $conservation*1.0/@models, 1];
+		    }
 		}
 	    }
 	    my $mc_reaction = $mc_reactions->{$rxn->{id}};
@@ -553,7 +574,7 @@ sub compare_models
 	    } else {
 		$mc_reaction->{number_models}++;
 	    }
-	    $mc_reaction->{reaction_model_data}->{$model1->{id}} = [1,$rxn->{direction},[$ftrs],$rxn->{dispfeatures}];
+	    $mc_reaction->{reaction_model_data}->{$model1->{id}} = [1,$rxn->{direction},$ftrs,$rxn->{dispfeatures}];
 	    foreach my $model2 (@models) {
 		next if $model1->{id} eq $model2->{id};
 
@@ -567,27 +588,30 @@ sub compare_models
 		    $model2_ftrs = $model2->{rxnhash}->{$rxn->{rxnkbid}."_".$rxn->{cmpkbid}}->{ftrhash};
 		}
 
-		my $gpr_matched = 1;
-		foreach my $ftr (keys %{$rxn->{ftrhash}}) {
-		    my $found_a_match = 0;
-		    foreach my $gene (@{$gene_translation->{ftr}}) {
-			if ($ftr2model{$gene} eq $model2->{id}) {
-			    $found_a_match = 1;
-			    last;
-			}
-		    }
-		    $gpr_matched = 0 if ($found_a_match == 0);
-		}
-		if ($gpr_matched == 1) {
-		    foreach my $ftr (keys %{$model2_ftrs}) {
+		my $gpr_matched = 0;
+		if (scalar keys %{$rxn->{ftrhash}} > 0) {
+		    $gpr_matched = 1;
+		    foreach my $ftr (keys %{$rxn->{ftrhash}}) {
 			my $found_a_match = 0;
-			foreach my $gene (@{$gene_translation->{ftr}}) {
-			    if ($ftr2model{$gene} eq $model1->{id}) {
+			foreach my $gene (keys %{$gene_translation->{$ftr}}) {
+			    if (exists $ftr2model{$gene}->{$model2->{id}}) {
 				$found_a_match = 1;
 				last;
 			    }
 			}
 			$gpr_matched = 0 if ($found_a_match == 0);
+		    }
+		    if ($gpr_matched == 1) {
+			foreach my $ftr (keys %{$model2_ftrs}) {
+			    my $found_a_match = 0;
+			    foreach my $gene (keys %{$gene_translation->{$ftr}}) {
+				if (exists $ftr2model{$gene}->{$model1->{id}}) {
+				    $found_a_match = 1;
+				    last;
+				}
+			    }
+			    $gpr_matched = 0 if ($found_a_match == 0);
+			}
 		    }
 		}
 		if ($gpr_matched == 1) {
@@ -595,6 +619,31 @@ sub compare_models
 		}
 	    }
 	}
+	# fill in info for reactions not in model
+	foreach my $rxnid (keys %rxn2families) {
+	    if (! exists $model1->{rxnhash}->{$rxnid}) {
+		my $ftrs = [];
+		if (defined $pangenome) {
+		    foreach my $familyid (keys %{$rxn2families{$rxnid}}) {
+			my $conservation = 0;
+			foreach my $m (keys %model2family) {
+			    $conservation++ if exists $model2family{$m}->{$familyid};
+			}
+			if (exists $model2family{$model1->{id}}->{$familyid}) {
+			    foreach my $ftr (@{$model2family{$model1->{id}}->{$familyid}}) {
+				push @$ftrs, [$ftr, $familyid, $conservation*1.0/@models, 0];
+			    }
+			}
+			else {
+			    push @$ftrs, ["", $familyid, $conservation*1.0/@models, 1];
+			}
+		    }
+		}
+		$mc_reactions->{$rxnid}->{reaction_model_data}->{$model1->{id}} = [1,"",$ftrs,""];
+	    }
+	}
+	# process compounds
+	my %cpds_registered; # keep track of which compounds are accounted for since they might appear in multiple compartments
 	foreach my $cpd (@{$model1->{modelcompounds}}) {
 	    my $match_id = $cpd->{cpdkbid};
 	    if ($match_id =~ "cpd00000") {
@@ -613,7 +662,10 @@ sub compare_models
 		};
 		$mc_compounds->{$mc_compound->{id}} = $mc_compound;
 	    } else {
-		$mc_compound->{number_models}++;
+		if (! exists $cpds_registered{$match_id}) {
+		    $mc_compound->{number_models}++;
+		    $cpds_registered{$match_id} = 1;
+		}
 		push @{$mc_compound->{model_compound_compartments}->{$model1->{id}}}, [$cpd->{modelcompartment_ref},$cpd->{charge}];
 	    }
 	    foreach my $model2 (@models) {
