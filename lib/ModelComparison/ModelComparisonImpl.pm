@@ -472,14 +472,19 @@ sub compare_models
     elsif (defined $pangenome) {
 	foreach my $family (@{$pangenome->{orthologs}}) {
 	    my $num_models = 0;
-	    my $family_model_data;
+	    my $family_model_data = {};
 	    foreach my $ortholog (@{$family->{orthologs}}) {
 		$ftr2family{$ortholog->[0]} = $family;
 		map { $gene_translation->{$ortholog->[0]}->{$_->[0]} = 1 } @{$family->{orthologs}};
-		if (exists $ftr2model{$ortholog->[0]}) {
-		    $num_models++;
-		    map { push @{$family_model_data->{$_}}, $ftr2reactions{$ortholog->[0]} } keys %{$ftr2model{$ortholog->[0]}};
-		    map { push @{$model2family{$_}->{$family->{id}}}, $ortholog->[0] } keys %{$ftr2model{$ortholog->[0]}};
+		foreach my $model (@models) {
+		    if (exists $ftr2model{$ortholog->[0]}->{$model->{id}}) {
+			$num_models++;
+			push @{$family_model_data->{$model->{id}}}, [1, $ftr2reactions{$ortholog->[0]}];
+			push @{$model2family{$model->{id}}->{$family->{id}}}, $ortholog->[0];
+		    }
+		    else {
+			push @{$family_model_data->{$model->{id}}}, [0, []];
+		    }
 		}
 	    }
 	    my $mc_family = {
