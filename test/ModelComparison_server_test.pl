@@ -71,15 +71,51 @@ eval {
 		      }]
 			    });
     $@ = '';
+    my $return;
     eval { 
-	print "Ready to compare_models\n";
-        my $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$obj_name});
-	print &Dumper($return);
+	print "Ready to compare_models with proteome comparison\n";
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$obj_name});
     };
     if ($@) {
 	print "Error during compare_models:\n".$@."\n";
     }
-    done_testing(1);
+    my $m1m2sim = $return->{models}->[0]->{model_similarity}->{'testmodel.2'};
+    ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 0 && $m1m2sim->[4] == 2, "model similarity with proteome OK");
+
+    $obj_name = "pangenome.1";
+    my $pangenome = {
+	id => "pg1",
+	name => $obj_name,
+	type => "type",
+	genome_refs => ['KBaseExampleData/Rhodobacter_sphaeroides_2.4.1','KBaseExampleData/Rhodobacter_sphaeroides_2.4.1'],
+	orthologs => [{
+	    id => "fam1",
+	    type => "type",
+	    function => "function",
+	    md5 => "md5",
+	    protein_translation => "pt",
+	    orthologs => [['RSP_0723', 0, "s"],['RSP_0723', 0, "s"]]}]
+    };
+    $ws_client->save_objects({
+	'workspace' => get_ws_name(),
+	'objects' => [{
+	    type => 'KBaseGenomes.Pangenome',
+	    name => $obj_name,
+	    data => $pangenome
+		      }]
+			    });
+    $@ = '';
+    eval { 
+	print "Ready to compare_models with pangenome comparison\n";
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'pangenome_ref'=>get_ws_name()."/".$obj_name});
+    };
+    if ($@) {
+	print "Error during compare_models:\n".$@."\n";
+    }
+    $m1m2sim = $return->{models}->[0]->{model_similarity}->{'testmodel.2'};
+    ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 1 && $m1m2sim->[4] == 1, "model similarity with pangenome OK");
+
+    done_testing(2);
 };
 my $err = undef;
 if ($@) {
