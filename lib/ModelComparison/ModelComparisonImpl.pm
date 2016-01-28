@@ -478,9 +478,7 @@ sub compare_models
 		map { $gene_translation->{$ortholog->[0]}->{$_->[0]} = 1 } @{$family->{orthologs}};
 		foreach my $model (@models) {
 		    if (exists $ftr2model{$ortholog->[0]}->{$model->{id}}) {
-			$in_models->{$model->{id}} = 1;
-			my @reactions = keys $ftr2reactions{$ortholog->[0]};
-			push @{$family_model_data->{$model->{id}}}, [1, \@reactions];
+			map { $in_models->{$model->{id}}->{$_} = 1 } keys $ftr2reactions{$ortholog->[0]};
 			push @{$model2family{$model->{id}}->{$family->{id}}}, $ortholog->[0];
 		    }
 		}
@@ -488,7 +486,13 @@ sub compare_models
 	    my $num_models = scalar keys %$in_models;
 	    if ($num_models > 0) {
 		foreach my $model (@models) {
-		    push @{$family_model_data->{$model->{id}}}, [0, []] if ! exists $in_models->{$model->{id}};
+		    if (exists $in_models->{$model->{id}}) {
+			my @reactions = sort keys %{$in_models->{$model->{id}}};
+			$family_model_data->{$model->{id}} =  [1, \@reactions];
+		    }
+		    else {
+			$family_model_data->{$model->{id}} = [0, []];
+		    }
 		}
 		my $mc_family = {
 		    family_id => $family->{id},
