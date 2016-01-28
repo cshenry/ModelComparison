@@ -784,7 +784,7 @@ sub compare_models
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
 							       method_name => 'compare_models');
     }
-    return($return);
+    return($return->{families});
 }
 
 
