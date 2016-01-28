@@ -489,16 +489,18 @@ sub compare_models
 		}
 	    }
 	    my $num_models = scalar keys %$in_models;
-	    my $mc_family = {
-		family_id => $family->{id},
-		function => $family->{function},
-		number_models => $num_models,
-		fraction_models => $num_models*1.0/@models,
-		core => ($num_models == @models),
-		family_model_data => $family_model_data
-	    };
-	    $mc_families->{$family->{id}} = $mc_family;
-	    $core_families++ if ($num_models == @models);
+	    if ($num_models > 0) {
+		my $mc_family = {
+		    family_id => $family->{id},
+		    function => $family->{function},
+		    number_models => $num_models,
+		    fraction_models => $num_models*1.0/@models,
+		    core => ($num_models == @models),
+		    family_model_data => $family_model_data
+		};
+		$mc_families->{$family->{id}} = $mc_family;
+		$core_families++ if ($num_models == @models);
+	    }
 	}
     }
 
