@@ -766,13 +766,13 @@ sub compare_models
 	$mc_bcpd->{fraction_models} = 1.0*$mc_bcpd->{number_models}/@models;
     }
 
-    $return->{models} = $mc_models;
-    $return->{reactions} = [values %$mc_reactions];
-    $return->{core_reactions} = $core_reactions;
-    $return->{compounds} = [values %$mc_compounds];
-    $return->{core_compounds} = $core_compounds;
-    $return->{biomasscpds} = [values %$mc_bcpds];
-    $return->{core_biomass_compounds} = $core_bcpds;
+#     $return->{models} = $mc_models;
+#     $return->{reactions} = [values %$mc_reactions];
+#     $return->{core_reactions} = $core_reactions;
+#     $return->{compounds} = [values %$mc_compounds];
+#     $return->{core_compounds} = $core_compounds;
+#     $return->{biomasscpds} = [values %$mc_bcpds];
+#     $return->{core_biomass_compounds} = $core_bcpds;
     $return->{core_families} = $core_families;
     $return->{families} = [values %$mc_families];
 
@@ -784,7 +784,7 @@ sub compare_models
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
 							       method_name => 'compare_models');
     }
-    return($return->{families});
+    return($return);
 }
 
 
