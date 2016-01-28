@@ -483,19 +483,19 @@ sub compare_models
 			push @{$family_model_data->{$model->{id}}}, [1, \@reactions];
 			push @{$model2family{$model->{id}}->{$family->{id}}}, $ortholog->[0];
 		    }
-		    else {
-			push @{$family_model_data->{$model->{id}}}, [0, []];
-		    }
 		}
 	    }
 	    my $num_models = scalar keys %$in_models;
 	    if ($num_models > 0) {
+		foreach my $model (@models) {
+		    push @{$family_model_data->{$model->{id}}}, [0, []] if ! exists $in_models->{$model->{id}};
+		}
 		my $mc_family = {
 		    family_id => $family->{id},
 		    function => $family->{function},
 		    number_models => $num_models,
 		    fraction_models => $num_models*1.0/@models,
-		    core => ($num_models == @models),
+		    core => ($num_models == @models ? 1 : 0),
 		    family_model_data => $family_model_data
 		};
 		$mc_families->{$family->{id}} = $mc_family;
