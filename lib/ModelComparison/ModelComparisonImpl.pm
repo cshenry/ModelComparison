@@ -782,6 +782,8 @@ sub compare_models
     $return->{core_families} = $core_families;
     $return->{families} = [values %$mc_families];
 
+    print &Dumper($return);
+
     #END compare_models
     my @_bad_returns;
     (ref($return) eq 'HASH') or push(@_bad_returns, "Invalid type for return variable \"return\" (value was \"$return\")");
