@@ -305,7 +305,10 @@ sub compare_models
 
     if (!exists $params->{'model_refs'}) {
         die "Parameter model_refs is not set in input arguments";
+    } elsif (@{$params->{model_refs}} < 2) {
+	die "Must select at least two models to compare";
     }
+
     my @model_refs = @{$params->{model_refs}};
     my $protcomp_ref = $params->{protcomp_ref};
     my $pangenome_ref = $params->{pangenome_ref};
