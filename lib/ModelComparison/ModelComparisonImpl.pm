@@ -688,9 +688,6 @@ sub compare_models
 		    (defined $model2->{cpdhash}->{$cpd->{cpdkbid}."_".$cpd->{cmpkbid}})) {
 		    $mc_model->{model_similarity}->{$model2->{id}}->[1]++;
 		}
-		else {
-		    print STDERR $model1->{id}, ":", $cpd->{id}, " [", $cpd->{cpdkbid}, "] not matched\n";
-		}
 	    }
 	}
 	my %model1bcpds;
@@ -726,7 +723,7 @@ sub compare_models
 			$mc_model->{model_similarity}->{$model2->{id}}->[2]++;
 		    }
 		    else {
-			print STDERR $model1->{id}, ":", $cpd->{id}, " [", $cpd->{cpdkbid}, "] biomass not matched\n";
+			print STDERR $model1->{id}, ":", $bcpd->{id}, " biomass not matched\n";
 		    }
 		}
 	    }
