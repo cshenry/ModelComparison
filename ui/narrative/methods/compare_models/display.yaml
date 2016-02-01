@@ -36,11 +36,11 @@ parameters :
         ui-name : |
             Proteome Comparison
         short-hint : |
-            A Proteome Comparison to use in comparing proteins between two models
+            A Proteome Comparison to use in comparing reaction-associated proteins between two models
     pangenome_ref :
         ui-name : |
             Pangenome
         short-hint : |
-            A Pangenome to use in comparing proteins between two or more models
+            A Pangenome to use in comparing reaction-associated proteins among two or more models
 description : |
     <p>This is a method to compare FBA Models based on reactions, compounds, biomass and proteins.</p>
