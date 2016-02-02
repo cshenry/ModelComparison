@@ -12,6 +12,14 @@
     },
     "parameters": [ 
         {
+            "id": "mc_name",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text"
+        },
+        {
             "id": "model_ref",
             "optional": false,
             "advanced": false,
@@ -54,6 +62,10 @@
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace"
+                },
+                {
+                    "input_parameter": "mc_name",
+                    "target_property": "mc_name"
                 },
                 {
                     "input_parameter": "model_ref",

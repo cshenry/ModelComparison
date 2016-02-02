@@ -27,6 +27,11 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
+    mc_name :
+        ui-name : |
+            Model Comparison
+        short-hint : |
+            Name for Model Comparison to be created
     model_ref :
         ui-name : |
             FBA Model
