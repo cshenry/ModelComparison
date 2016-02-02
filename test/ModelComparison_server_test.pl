@@ -74,12 +74,20 @@ eval {
     my $return;
     eval { 
 	print "Ready to compare_models with proteome comparison\n";
-        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$obj_name});
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$obj_name, 'mc_name'=>"mc.1"});
     };
     if ($@) {
 	print "Error during compare_models:\n".$@."\n";
     }
-    my $m1m2sim = $return->{models}->[0]->{model_similarity}->{'testmodel.2'};
+    my $mc1;
+    eval {
+	$mc1=$ws_client->get_objects([{ref=>get_ws_name()."/"."mc.1"}])->[0]{data};
+    };
+    if ($@) {
+	warn "Error loading mc1 from workspace:\n".$@;
+    }
+
+    my $m1m2sim = $mc1->{models}->[0]->{model_similarity}->{'testmodel.2'};
     ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 0 && $m1m2sim->[4] == 2, "model similarity with proteome OK");
 
     $obj_name = "pangenome.1";
@@ -107,14 +115,21 @@ eval {
     $@ = '';
     eval { 
 	print "Ready to compare_models with pangenome comparison\n";
-        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'pangenome_ref'=>get_ws_name()."/".$obj_name});
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'pangenome_ref'=>get_ws_name()."/".$obj_name, 'mc_name'=>"mc.2"});
     };
     if ($@) {
 	print "Error during compare_models:\n".$@."\n";
     }
-    $m1m2sim = $return->{models}->[0]->{model_similarity}->{'testmodel.2'};
+
+    my $mc2;
+    eval {
+	$mc2=$ws_client->get_objects([{ref=>get_ws_name()."/"."mc.2"}])->[0]{data};
+    };
+    if ($@) {
+	warn "Error loading mc1 from workspace:\n".$@;
+    }
+    $m1m2sim = $mc2->{models}->[0]->{model_similarity}->{'testmodel.2'};
     ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 1 && $m1m2sim->[4] == 1, "model similarity with pangenome OK");
-    print &Dumper($return);
     done_testing(2);
 };
 my $err = undef;

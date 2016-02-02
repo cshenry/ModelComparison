@@ -121,107 +121,28 @@ sub new
 
 <pre>
 $params is a ModelComparison.ModelComparisonParams
-$return is a ModelComparison.ModelComparisonResult
+$return is a ModelComparison.object_metadata
 ModelComparisonParams is a reference to a hash where the following keys are defined:
 	workspace has a value which is a string
+	mc_name has a value which is a string
 	model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 Model_ref is a string
 Protcomp_ref is a string
 Pangenome_ref is a string
-ModelComparisonResult is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	name has a value which is a string
-	core_reactions has a value which is an int
-	core_compounds has a value which is an int
-	core_families has a value which is an int
-	core_biomass_compounds has a value which is an int
-	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
-	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
-	models has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonModel
-	reactions has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonReaction
-	compounds has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonCompound
-	families has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonFamily
-	biomasscpds has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonBiomassCompound
-ModelComparisonModel is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	model_ref has a value which is a ModelComparison.Model_ref
-	genome_ref has a value which is a ModelComparison.Genome_ref
-	model_similarity has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 5 items:
-		0: (common_reactions) an int
-		1: (common_compounds) an int
-		2: (common_biomasscpds) an int
-		3: (common_families) an int
-		4: (common_gpr) an int
-
-	name has a value which is a string
-	taxonomy has a value which is a string
-	reactions has a value which is an int
-	families has a value which is an int
-	compounds has a value which is an int
-	biomasscpds has a value which is an int
-	biomasses has a value which is an int
-Genome_ref is a string
-ModelComparisonReaction is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	reaction_ref has a value which is a ModelComparison.Reaction_ref
-	name has a value which is a string
-	equation has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	reaction_model_data has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 4 items:
-		0: (present) a ModelComparison.bool
-		1: (direction) a string
-		2: a reference to a list where each element is a reference to a list containing 4 items:
-				0: a ModelComparison.Feature_id
-				1: a ModelComparison.Family_id
-				2: (conservation) a float
-				3: (missing) a ModelComparison.bool
-		
-		3: (gpr) a string
-
-Reaction_ref is a string
-bool is an int
-Feature_id is a string
-Family_id is a string
-ModelComparisonCompound is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	compound_ref has a value which is a ModelComparison.Compound_ref
-	name has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	model_compound_compartments has a value which is a reference to a hash where the key is a string and the value is a reference to a list where each element is a reference to a list containing 2 items:
-		0: a ModelComparison.Compartment_ref
-		1: (charge) a float
-
-Compound_ref is a string
-Compartment_ref is a string
-ModelComparisonFamily is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	family_id has a value which is a ModelComparison.Family_id
-	function has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	family_model_data has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 2 items:
-		0: (present) a ModelComparison.bool
-		1: a reference to a list where each element is a ModelComparison.reaction_id
-
-reaction_id is a string
-ModelComparisonBiomassCompound is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	compound_ref has a value which is a ModelComparison.Compound_ref
-	name has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	model_biomass_compounds has a value which is a reference to a hash where the key is a string and the value is a reference to a list where each element is a reference to a list containing 2 items:
-		0: a ModelComparison.Compartment_ref
-		1: (coefficient) a float
-
+object_metadata is a reference to a list containing 11 items:
+	0: (id) a string
+	1: (type) a string
+	2: (moddate) a string
+	3: (instance) an int
+	4: (command) a string
+	5: (lastmodifier) a string
+	6: (owner) a string
+	7: (workspace) a string
+	8: (workspace_ref) a string
+	9: (chsum) a string
+	10: (metadata) a reference to a hash where the key is a string and the value is a string
 
 </pre>
 
@@ -230,107 +151,28 @@ ModelComparisonBiomassCompound is a reference to a hash where the following keys
 =begin text
 
 $params is a ModelComparison.ModelComparisonParams
-$return is a ModelComparison.ModelComparisonResult
+$return is a ModelComparison.object_metadata
 ModelComparisonParams is a reference to a hash where the following keys are defined:
 	workspace has a value which is a string
+	mc_name has a value which is a string
 	model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 Model_ref is a string
 Protcomp_ref is a string
 Pangenome_ref is a string
-ModelComparisonResult is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	name has a value which is a string
-	core_reactions has a value which is an int
-	core_compounds has a value which is an int
-	core_families has a value which is an int
-	core_biomass_compounds has a value which is an int
-	protcomp_ref has a value which is a ModelComparison.Protcomp_ref
-	pangenome_ref has a value which is a ModelComparison.Pangenome_ref
-	models has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonModel
-	reactions has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonReaction
-	compounds has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonCompound
-	families has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonFamily
-	biomasscpds has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonBiomassCompound
-ModelComparisonModel is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	model_ref has a value which is a ModelComparison.Model_ref
-	genome_ref has a value which is a ModelComparison.Genome_ref
-	model_similarity has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 5 items:
-		0: (common_reactions) an int
-		1: (common_compounds) an int
-		2: (common_biomasscpds) an int
-		3: (common_families) an int
-		4: (common_gpr) an int
-
-	name has a value which is a string
-	taxonomy has a value which is a string
-	reactions has a value which is an int
-	families has a value which is an int
-	compounds has a value which is an int
-	biomasscpds has a value which is an int
-	biomasses has a value which is an int
-Genome_ref is a string
-ModelComparisonReaction is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	reaction_ref has a value which is a ModelComparison.Reaction_ref
-	name has a value which is a string
-	equation has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	reaction_model_data has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 4 items:
-		0: (present) a ModelComparison.bool
-		1: (direction) a string
-		2: a reference to a list where each element is a reference to a list containing 4 items:
-				0: a ModelComparison.Feature_id
-				1: a ModelComparison.Family_id
-				2: (conservation) a float
-				3: (missing) a ModelComparison.bool
-		
-		3: (gpr) a string
-
-Reaction_ref is a string
-bool is an int
-Feature_id is a string
-Family_id is a string
-ModelComparisonCompound is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	compound_ref has a value which is a ModelComparison.Compound_ref
-	name has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	model_compound_compartments has a value which is a reference to a hash where the key is a string and the value is a reference to a list where each element is a reference to a list containing 2 items:
-		0: a ModelComparison.Compartment_ref
-		1: (charge) a float
-
-Compound_ref is a string
-Compartment_ref is a string
-ModelComparisonFamily is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	family_id has a value which is a ModelComparison.Family_id
-	function has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	family_model_data has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 2 items:
-		0: (present) a ModelComparison.bool
-		1: a reference to a list where each element is a ModelComparison.reaction_id
-
-reaction_id is a string
-ModelComparisonBiomassCompound is a reference to a hash where the following keys are defined:
-	id has a value which is a string
-	compound_ref has a value which is a ModelComparison.Compound_ref
-	name has a value which is a string
-	number_models has a value which is an int
-	fraction_models has a value which is a float
-	core has a value which is a ModelComparison.bool
-	model_biomass_compounds has a value which is a reference to a hash where the key is a string and the value is a reference to a list where each element is a reference to a list containing 2 items:
-		0: a ModelComparison.Compartment_ref
-		1: (coefficient) a float
-
+object_metadata is a reference to a list containing 11 items:
+	0: (id) a string
+	1: (type) a string
+	2: (moddate) a string
+	3: (instance) an int
+	4: (command) a string
+	5: (lastmodifier) a string
+	6: (owner) a string
+	7: (workspace) a string
+	8: (workspace_ref) a string
+	9: (chsum) a string
+	10: (metadata) a reference to a hash where the key is a string and the value is a string
 
 
 =end text
@@ -1096,7 +938,7 @@ model_biomass_compounds has a value which is a reference to a hash where the key
 
 =item Description
 
-ModelComparisonParams object: a list of models and optional pangenome and protein comparison
+ModelComparisonParams object: a list of models and optional pangenome and protein comparison; mc_name is the name for the new object.
 
 @optional protcomp_ref pangenome_ref
 
@@ -1108,6 +950,7 @@ ModelComparisonParams object: a list of models and optional pangenome and protei
 <pre>
 a reference to a hash where the following keys are defined:
 workspace has a value which is a string
+mc_name has a value which is a string
 model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 pangenome_ref has a value which is a ModelComparison.Pangenome_ref
@@ -1120,6 +963,7 @@ pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 
 a reference to a hash where the following keys are defined:
 workspace has a value which is a string
+mc_name has a value which is a string
 model_refs has a value which is a reference to a list where each element is a ModelComparison.Model_ref
 protcomp_ref has a value which is a ModelComparison.Protcomp_ref
 pangenome_ref has a value which is a ModelComparison.Pangenome_ref
@@ -1131,7 +975,7 @@ pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 
 
 
-=head2 ModelComparisonResult
+=head2 ModelComparison
 
 =over 4
 
@@ -1139,7 +983,7 @@ pangenome_ref has a value which is a ModelComparison.Pangenome_ref
 
 =item Description
 
-ModelComparisonResult object: this object holds information about a comparison of multiple models
+ModelComparison object: this object holds information about a comparison of multiple models
 
 @optional protcomp_ref pangenome_ref
 @metadata ws core_reactions as Core reactions
@@ -1195,6 +1039,56 @@ reactions has a value which is a reference to a list where each element is a Mod
 compounds has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonCompound
 families has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonFamily
 biomasscpds has a value which is a reference to a list where each element is a ModelComparison.ModelComparisonBiomassCompound
+
+
+=end text
+
+=back
+
+
+
+=head2 object_metadata
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a list containing 11 items:
+0: (id) a string
+1: (type) a string
+2: (moddate) a string
+3: (instance) an int
+4: (command) a string
+5: (lastmodifier) a string
+6: (owner) a string
+7: (workspace) a string
+8: (workspace_ref) a string
+9: (chsum) a string
+10: (metadata) a reference to a hash where the key is a string and the value is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a list containing 11 items:
+0: (id) a string
+1: (type) a string
+2: (moddate) a string
+3: (instance) an int
+4: (command) a string
+5: (lastmodifier) a string
+6: (owner) a string
+7: (workspace) a string
+8: (workspace_ref) a string
+9: (chsum) a string
+10: (metadata) a reference to a hash where the key is a string and the value is a string
 
 
 =end text

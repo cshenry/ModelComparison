@@ -136,19 +136,20 @@ module ModelComparison {
     } ModelComparisonBiomassCompound;
     
     /*
-    ModelComparisonParams object: a list of models and optional pangenome and protein comparison
+    ModelComparisonParams object: a list of models and optional pangenome and protein comparison; mc_name is the name for the new object.
 
     @optional protcomp_ref pangenome_ref
     */
     typedef structure {
 	string workspace;
+	string mc_name;
 	list<Model_ref> model_refs;
 	Protcomp_ref protcomp_ref;
 	Pangenome_ref pangenome_ref;
     } ModelComparisonParams;
 
     /*
-    ModelComparisonResult object: this object holds information about a comparison of multiple models
+    ModelComparison object: this object holds information about a comparison of multiple models
 
     @optional protcomp_ref pangenome_ref
     @metadata ws core_reactions as Core reactions
@@ -178,10 +179,12 @@ module ModelComparison {
 	list<ModelComparisonCompound> compounds;
 	list<ModelComparisonFamily> families;
 	list<ModelComparisonBiomassCompound> biomasscpds;
-    } ModelComparisonResult;
+    } ModelComparison;
     
+    typedef tuple<string id,string type,string moddate,int instance,string command,string lastmodifier,string owner,string workspace,string workspace_ref,string chsum,mapping<string,string> metadata> object_metadata;
+
     /*
     Compare models
     */
-    funcdef compare_models(ModelComparisonParams params) returns (ModelComparisonResult) authentication required;
+    funcdef compare_models(ModelComparisonParams params) returns (object_metadata) authentication required;
 };

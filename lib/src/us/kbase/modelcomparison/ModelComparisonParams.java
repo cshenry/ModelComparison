@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 /**
  * <p>Original spec-file type: ModelComparisonParams</p>
  * <pre>
- * ModelComparisonParams object: a list of models and optional pangenome and protein comparison
+ * ModelComparisonParams object: a list of models and optional pangenome and protein comparison; mc_name is the name for the new object.
  * @optional protcomp_ref pangenome_ref
  * </pre>
  * 
@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "workspace",
+    "mc_name",
     "model_refs",
     "protcomp_ref",
     "pangenome_ref"
@@ -32,6 +33,8 @@ public class ModelComparisonParams {
 
     @JsonProperty("workspace")
     private java.lang.String workspace;
+    @JsonProperty("mc_name")
+    private java.lang.String mcName;
     @JsonProperty("model_refs")
     private List<String> modelRefs;
     @JsonProperty("protcomp_ref")
@@ -52,6 +55,21 @@ public class ModelComparisonParams {
 
     public ModelComparisonParams withWorkspace(java.lang.String workspace) {
         this.workspace = workspace;
+        return this;
+    }
+
+    @JsonProperty("mc_name")
+    public java.lang.String getMcName() {
+        return mcName;
+    }
+
+    @JsonProperty("mc_name")
+    public void setMcName(java.lang.String mcName) {
+        this.mcName = mcName;
+    }
+
+    public ModelComparisonParams withMcName(java.lang.String mcName) {
+        this.mcName = mcName;
         return this;
     }
 
@@ -112,7 +130,7 @@ public class ModelComparisonParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((("ModelComparisonParams"+" [workspace=")+ workspace)+", modelRefs=")+ modelRefs)+", protcompRef=")+ protcompRef)+", pangenomeRef=")+ pangenomeRef)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((("ModelComparisonParams"+" [workspace=")+ workspace)+", mcName=")+ mcName)+", modelRefs=")+ modelRefs)+", protcompRef=")+ protcompRef)+", pangenomeRef=")+ pangenomeRef)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
