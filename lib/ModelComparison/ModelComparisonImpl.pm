@@ -544,7 +544,7 @@ sub compare_models
 	    foreach my $bcpd (@{$biomass->{biomasscompounds}}) {
 		my $cpd = $mcpd_refs{$bcpd->{modelcompound_ref}};
 		my $match_id = $cpd->{cpdkbid};
-		if ($match_id =~ "cpd00000") {
+		if (! defined $match_id || $match_id =~ "cpd00000") {
 		    $match_id = $cpd->{id};
 		    $match_id =~ s/_[a-zA-z]\d+$//g;
 		}
@@ -570,9 +570,6 @@ sub compare_models
 		    if (($cpd->{cpdkbid} =~ "cpd00000" && defined $model2->{cpdhash}->{$cpd->{id}}) ||
 			(defined $model2->{cpdhash}->{$cpd->{cpdkbid}."_".$cpd->{cmpkbid}})) {
 			$mc_model->{model_similarity}->{$model2->{id}}->[2]++;
-		    }
-		    else {
-			print STDERR $model1->{id}, ":", $bcpd->{id}, " biomass not matched\n";
 		    }
 		}
 	    }
