@@ -551,13 +551,14 @@ sub compare_models
 		$model1bcpds{$match_id} = 0;
 		my $mc_bcpd = $mc_bcpds->{$match_id};
 		if (! defined $mc_bcpd) {
+		    my $cref = defined $cpd->{modelcompartment_ref} ? $cpd->{modelcompartment_ref} : "";
 		    $mc_bcpd = {
 			id => $match_id,
 			compound_ref => $cpd->{compound_ref},
 			name => $cpd->{name},
 			number_models => 1,
 			core => 0,
-			model_biomass_compounds => { $model1->{id} => [[$cpd->{modelcompartment_ref},$bcpd->{coefficient}]] }
+			model_biomass_compounds => { $model1->{id} => [[$cref,$bcpd->{coefficient}]] }
 		    };
 		    $mc_bcpds->{$mc_bcpd->{id}} = $mc_bcpd;
 		} else {
