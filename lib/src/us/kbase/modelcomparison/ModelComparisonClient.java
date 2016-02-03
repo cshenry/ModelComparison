@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientCaller;
 import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.RpcContext;
-import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UnauthorizedException;
 
 /**
@@ -146,15 +144,15 @@ public class ModelComparisonClient {
      * Compare models
      * </pre>
      * @param   params   instance of type {@link us.kbase.modelcomparison.ModelComparisonParams ModelComparisonParams}
-     * @return   instance of original type "object_metadata" &rarr; tuple of size 11: parameter "id" of String, parameter "type" of String, parameter "moddate" of String, parameter "instance" of Long, parameter "command" of String, parameter "lastmodifier" of String, parameter "owner" of String, parameter "workspace" of String, parameter "workspace_ref" of String, parameter "chsum" of String, parameter "metadata" of mapping from String to String
+     * @return   instance of type {@link us.kbase.modelcomparison.ModelComparisonResult ModelComparisonResult}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public Tuple11<String, String, String, Long, String, String, String, String, String, String, Map<String,String>> compareModels(ModelComparisonParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public ModelComparisonResult compareModels(ModelComparisonParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
-        TypeReference<List<Tuple11<String, String, String, Long, String, String, String, String, String, String, Map<String,String>>>> retType = new TypeReference<List<Tuple11<String, String, String, Long, String, String, String, String, String, String, Map<String,String>>>>() {};
-        List<Tuple11<String, String, String, Long, String, String, String, String, String, String, Map<String,String>>> res = caller.jsonrpcCall("ModelComparison.compare_models", args, retType, true, true, jsonRpcContext);
+        TypeReference<List<ModelComparisonResult>> retType = new TypeReference<List<ModelComparisonResult>>() {};
+        List<ModelComparisonResult> res = caller.jsonrpcCall("ModelComparison.compare_models", args, retType, true, true, jsonRpcContext);
         return res.get(0);
     }
 }

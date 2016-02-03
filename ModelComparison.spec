@@ -181,10 +181,12 @@ module ModelComparison {
 	list<ModelComparisonBiomassCompound> biomasscpds;
     } ModelComparison;
     
-    typedef tuple<string id,string type,string moddate,int instance,string command,string lastmodifier,string owner,string workspace,string workspace_ref,string chsum,mapping<string,string> metadata> object_metadata;
+    typedef structure {
+	string mc_ref;
+    } ModelComparisonResult;
 
     /*
     Compare models
     */
-    funcdef compare_models(ModelComparisonParams params) returns (object_metadata) authentication required;
+    funcdef compare_models(ModelComparisonParams params) returns (ModelComparisonResult) authentication required;
 };

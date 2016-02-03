@@ -121,7 +121,7 @@ sub new
 
 <pre>
 $params is a ModelComparison.ModelComparisonParams
-$return is a ModelComparison.object_metadata
+$return is a ModelComparison.ModelComparisonResult
 ModelComparisonParams is a reference to a hash where the following keys are defined:
 	workspace has a value which is a string
 	mc_name has a value which is a string
@@ -131,18 +131,8 @@ ModelComparisonParams is a reference to a hash where the following keys are defi
 Model_ref is a string
 Protcomp_ref is a string
 Pangenome_ref is a string
-object_metadata is a reference to a list containing 11 items:
-	0: (id) a string
-	1: (type) a string
-	2: (moddate) a string
-	3: (instance) an int
-	4: (command) a string
-	5: (lastmodifier) a string
-	6: (owner) a string
-	7: (workspace) a string
-	8: (workspace_ref) a string
-	9: (chsum) a string
-	10: (metadata) a reference to a hash where the key is a string and the value is a string
+ModelComparisonResult is a reference to a hash where the following keys are defined:
+	mc_ref has a value which is a string
 
 </pre>
 
@@ -151,7 +141,7 @@ object_metadata is a reference to a list containing 11 items:
 =begin text
 
 $params is a ModelComparison.ModelComparisonParams
-$return is a ModelComparison.object_metadata
+$return is a ModelComparison.ModelComparisonResult
 ModelComparisonParams is a reference to a hash where the following keys are defined:
 	workspace has a value which is a string
 	mc_name has a value which is a string
@@ -161,18 +151,8 @@ ModelComparisonParams is a reference to a hash where the following keys are defi
 Model_ref is a string
 Protcomp_ref is a string
 Pangenome_ref is a string
-object_metadata is a reference to a list containing 11 items:
-	0: (id) a string
-	1: (type) a string
-	2: (moddate) a string
-	3: (instance) an int
-	4: (command) a string
-	5: (lastmodifier) a string
-	6: (owner) a string
-	7: (workspace) a string
-	8: (workspace_ref) a string
-	9: (chsum) a string
-	10: (metadata) a reference to a hash where the key is a string and the value is a string
+ModelComparisonResult is a reference to a hash where the following keys are defined:
+	mc_ref has a value which is a string
 
 
 =end text
@@ -1047,7 +1027,7 @@ biomasscpds has a value which is a reference to a list where each element is a M
 
 
 
-=head2 object_metadata
+=head2 ModelComparisonResult
 
 =over 4
 
@@ -1058,18 +1038,8 @@ biomasscpds has a value which is a reference to a list where each element is a M
 =begin html
 
 <pre>
-a reference to a list containing 11 items:
-0: (id) a string
-1: (type) a string
-2: (moddate) a string
-3: (instance) an int
-4: (command) a string
-5: (lastmodifier) a string
-6: (owner) a string
-7: (workspace) a string
-8: (workspace_ref) a string
-9: (chsum) a string
-10: (metadata) a reference to a hash where the key is a string and the value is a string
+a reference to a hash where the following keys are defined:
+mc_ref has a value which is a string
 
 </pre>
 
@@ -1077,18 +1047,8 @@ a reference to a list containing 11 items:
 
 =begin text
 
-a reference to a list containing 11 items:
-0: (id) a string
-1: (type) a string
-2: (moddate) a string
-3: (instance) an int
-4: (command) a string
-5: (lastmodifier) a string
-6: (owner) a string
-7: (workspace) a string
-8: (workspace_ref) a string
-9: (chsum) a string
-10: (metadata) a reference to a hash where the key is a string and the value is a string
+a reference to a hash where the following keys are defined:
+mc_ref has a value which is a string
 
 
 =end text

@@ -89,9 +89,13 @@
             ],
             "output_mapping": [
                 {
-                    "service_method_output_path": [0],
-                    "target_property": "compare_models_result"
+                    "service_method_output_path": [0, "mc_ref"],
+                    "target_property": "mc_ref"
                 },
+		{
+		    "input_parameter": "mc_name",
+		    "target_property": "mc_id"
+		},
                 {
                     "narrative_system_variable": "workspace",
                     "target_property": "workspace_name"
