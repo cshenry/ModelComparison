@@ -357,13 +357,14 @@ sub compare_models
 	my $mc_model = {};
 	push @{$mc_models}, $mc_model;
 	$mc_model->{id} = $model1->{id};
+	$mc_model->{name} = $model1->{name};
 	$mc_model->{model_ref} = $model1->{model_ref};
 	$mc_model->{genome_ref} = $model1->{genome_ref};
 	$mc_model->{families} = exists $model2family{$model1->{id}} ? scalar keys %{$model2family{$model1->{id}}} : 0;
 
 	eval {
 	    my $genome=$wsClient->get_objects([{ref=>$model1->{genome_ref}}])->[0]{data};
-	    $mc_model->{name} = $genome->{scientific_name};
+	    $mc_model->{scientific_name} = $genome->{scientific_name};
 	    $mc_model->{taxonomy} = $genome->{taxonomy};
 	};
 	if ($@) {
@@ -1035,6 +1036,7 @@ ModelComparisonModel object: this object holds information about a model in a mo
 <pre>
 a reference to a hash where the following keys are defined:
 id has a value which is a string
+name has a value which is a string
 model_ref has a value which is a ModelComparison.Model_ref
 genome_ref has a value which is a ModelComparison.Genome_ref
 model_similarity has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 5 items:
@@ -1044,7 +1046,7 @@ model_similarity has a value which is a reference to a hash where the key is a s
 	3: (common_families) an int
 	4: (common_gpr) an int
 
-name has a value which is a string
+scientific_name has a value which is a string
 taxonomy has a value which is a string
 reactions has a value which is an int
 families has a value which is an int
@@ -1060,6 +1062,7 @@ biomasses has a value which is an int
 
 a reference to a hash where the following keys are defined:
 id has a value which is a string
+name has a value which is a string
 model_ref has a value which is a ModelComparison.Model_ref
 genome_ref has a value which is a ModelComparison.Genome_ref
 model_similarity has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 5 items:
@@ -1069,7 +1072,7 @@ model_similarity has a value which is a reference to a hash where the key is a s
 	3: (common_families) an int
 	4: (common_gpr) an int
 
-name has a value which is a string
+scientific_name has a value which is a string
 taxonomy has a value which is a string
 reactions has a value which is an int
 families has a value which is an int

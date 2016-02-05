@@ -23,10 +23,11 @@ import us.kbase.common.service.Tuple5;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "id",
+    "name",
     "model_ref",
     "genome_ref",
     "model_similarity",
-    "name",
+    "scientific_name",
     "taxonomy",
     "reactions",
     "families",
@@ -38,14 +39,16 @@ public class ModelComparisonModel {
 
     @JsonProperty("id")
     private java.lang.String id;
+    @JsonProperty("name")
+    private java.lang.String name;
     @JsonProperty("model_ref")
     private java.lang.String modelRef;
     @JsonProperty("genome_ref")
     private java.lang.String genomeRef;
     @JsonProperty("model_similarity")
     private Map<String, Tuple5 <Long, Long, Long, Long, Long>> modelSimilarity;
-    @JsonProperty("name")
-    private java.lang.String name;
+    @JsonProperty("scientific_name")
+    private java.lang.String scientificName;
     @JsonProperty("taxonomy")
     private java.lang.String taxonomy;
     @JsonProperty("reactions")
@@ -72,6 +75,21 @@ public class ModelComparisonModel {
 
     public ModelComparisonModel withId(java.lang.String id) {
         this.id = id;
+        return this;
+    }
+
+    @JsonProperty("name")
+    public java.lang.String getName() {
+        return name;
+    }
+
+    @JsonProperty("name")
+    public void setName(java.lang.String name) {
+        this.name = name;
+    }
+
+    public ModelComparisonModel withName(java.lang.String name) {
+        this.name = name;
         return this;
     }
 
@@ -120,18 +138,18 @@ public class ModelComparisonModel {
         return this;
     }
 
-    @JsonProperty("name")
-    public java.lang.String getName() {
-        return name;
+    @JsonProperty("scientific_name")
+    public java.lang.String getScientificName() {
+        return scientificName;
     }
 
-    @JsonProperty("name")
-    public void setName(java.lang.String name) {
-        this.name = name;
+    @JsonProperty("scientific_name")
+    public void setScientificName(java.lang.String scientificName) {
+        this.scientificName = scientificName;
     }
 
-    public ModelComparisonModel withName(java.lang.String name) {
-        this.name = name;
+    public ModelComparisonModel withScientificName(java.lang.String scientificName) {
+        this.scientificName = scientificName;
         return this;
     }
 
@@ -237,7 +255,7 @@ public class ModelComparisonModel {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((((("ModelComparisonModel"+" [id=")+ id)+", modelRef=")+ modelRef)+", genomeRef=")+ genomeRef)+", modelSimilarity=")+ modelSimilarity)+", name=")+ name)+", taxonomy=")+ taxonomy)+", reactions=")+ reactions)+", families=")+ families)+", compounds=")+ compounds)+", biomasscpds=")+ biomasscpds)+", biomasses=")+ biomasses)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((("ModelComparisonModel"+" [id=")+ id)+", name=")+ name)+", modelRef=")+ modelRef)+", genomeRef=")+ genomeRef)+", modelSimilarity=")+ modelSimilarity)+", scientificName=")+ scientificName)+", taxonomy=")+ taxonomy)+", reactions=")+ reactions)+", families=")+ families)+", compounds=")+ compounds)+", biomasscpds=")+ biomasscpds)+", biomasses=")+ biomasses)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
