@@ -70,11 +70,10 @@ module ModelComparison {
     */
     typedef structure {
 	string id;
-	string name;
 	Model_ref model_ref;
 	Genome_ref genome_ref;
 	mapping<string model_id,tuple<int common_reactions,int common_compounds,int common_biomasscpds,int common_families,int common_gpr> > model_similarity; 
-	string scientific_name;
+	string name;
 	string taxonomy;
 	int reactions;
 	int families;

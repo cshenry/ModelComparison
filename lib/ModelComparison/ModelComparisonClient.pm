@@ -633,7 +633,6 @@ ModelComparisonModel object: this object holds information about a model in a mo
 <pre>
 a reference to a hash where the following keys are defined:
 id has a value which is a string
-name has a value which is a string
 model_ref has a value which is a ModelComparison.Model_ref
 genome_ref has a value which is a ModelComparison.Genome_ref
 model_similarity has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 5 items:
@@ -643,7 +642,7 @@ model_similarity has a value which is a reference to a hash where the key is a s
 	3: (common_families) an int
 	4: (common_gpr) an int
 
-scientific_name has a value which is a string
+name has a value which is a string
 taxonomy has a value which is a string
 reactions has a value which is an int
 families has a value which is an int
@@ -659,7 +658,6 @@ biomasses has a value which is an int
 
 a reference to a hash where the following keys are defined:
 id has a value which is a string
-name has a value which is a string
 model_ref has a value which is a ModelComparison.Model_ref
 genome_ref has a value which is a ModelComparison.Genome_ref
 model_similarity has a value which is a reference to a hash where the key is a string and the value is a reference to a list containing 5 items:
@@ -669,7 +667,7 @@ model_similarity has a value which is a reference to a hash where the key is a s
 	3: (common_families) an int
 	4: (common_gpr) an int
 
-scientific_name has a value which is a string
+name has a value which is a string
 taxonomy has a value which is a string
 reactions has a value which is an int
 families has a value which is an int
