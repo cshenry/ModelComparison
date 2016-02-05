@@ -131,6 +131,7 @@ sub compare_models
 	die "Must select at least two models to compare";
     }
 
+    my $mc_models;
     my $mc_name = $params->{mc_name};
     my @model_refs = @{$params->{model_refs}};
     my $protcomp_ref = $params->{protcomp_ref};
@@ -159,6 +160,7 @@ sub compare_models
 
     my $protcomp;
     if (defined $protcomp_ref) {
+	$mc_models->{protcomp_ref} = $protcomp_ref;
 	eval {
 	    $protcomp=$wsClient->get_objects([{ref=>$protcomp_ref}])->[0]{data};
 	};
@@ -169,6 +171,7 @@ sub compare_models
 
     my $pangenome;
     if (defined $pangenome_ref) {
+	$mc_models->{pangenome_ref} = $pangenome_ref;
 	eval {
 	    $pangenome=$wsClient->get_objects([{ref=>$pangenome_ref}])->[0]{data};
 	};
@@ -348,7 +351,6 @@ sub compare_models
 
     # READY TO COMPARE
     
-    my $mc_models;
     my $mc_reactions;
     my $mc_compounds;
     my $mc_bcpds;
