@@ -48,17 +48,17 @@ eval {
     $sbml = join "", @sbml;
     $fba_client->import_fbamodel({'workspace'=>get_ws_name(), 'genome'=>'Rhodobacter_sphaeroides_2.4.1', 'genome_workspace'=>'KBaseExampleData', 'model'=>$obj_name, 'biomass'=>'biomass0', 'sbml'=>$sbml});
     push @$models, get_ws_name()."/".$obj_name;
-    $obj_name = "protcomp.1";
+    my $pc_name = "protcomp.1";
     my $protcomp = {
 	id => 1,
 	genome1ref => 'KBaseExampleData/Rhodobacter_sphaeroides_2.4.1',
 	genome2ref => 'KBaseExampleData/Rhodobacter_sphaeroides_2.4.1',
-	proteome1names => ['RSP_0723','RSP_1012','RSP_4032'],
-	proteome2names => ['RSP_0723','RSP_1012','RSP_4032'],
+	proteome1names => ['RSP_1012','RSP_4032'],
+	proteome2names => ['RSP_1012','RSP_4032'],
 	proteome1map => {},
 	proteome2map => {},
-	data1 => [[[0,0,0]],[[1,1,1]],[[2,2,2]]],
-	data2 => [[[0,0,0]],[[1,1,1]],[[2,2,2]]],
+	data1 => [[[0,0,0]],[[1,1,1]]],
+	data2 => [[[0,0,0]],[[1,1,1]]],
 	sub_bbh_percent => 0,
 	max_evalue => "0"
     };
@@ -66,7 +66,7 @@ eval {
 	'workspace' => get_ws_name(),
 	'objects' => [{
 	    type => 'GenomeComparison.ProteomeComparison',
-	    name => $obj_name,
+	    name => $pc_name,
 	    data => $protcomp
 		      }]
 			    });
@@ -74,7 +74,7 @@ eval {
     my $return;
     eval { 
 	print "Ready to compare_models with proteome comparison\n";
-        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$obj_name, 'mc_name'=>"mc.1"});
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'protcomp_ref'=>get_ws_name()."/".$pc_name, 'mc_name'=>"mc.1"});
     };
     if ($@) {
 	print "Error during compare_models:\n".$@."\n";
@@ -88,12 +88,12 @@ eval {
     }
 
     my $m1m2sim = $mc1->{models}->[0]->{model_similarity}->{'testmodel.2'};
-    ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 0 && $m1m2sim->[4] == 2, "model similarity with proteome OK");
+    ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 0 && $m1m2sim->[4] == 1, "model similarity with proteome OK");
 
-    $obj_name = "pangenome.1";
+    my $pg_name = "pangenome.1";
     my $pangenome = {
 	id => "pg1",
-	name => $obj_name,
+	name => $pg_name,
 	type => "type",
 	genome_refs => ['KBaseExampleData/Rhodobacter_sphaeroides_2.4.1','KBaseExampleData/Rhodobacter_sphaeroides_2.4.1'],
 	orthologs => [{
@@ -108,14 +108,14 @@ eval {
 	'workspace' => get_ws_name(),
 	'objects' => [{
 	    type => 'KBaseGenomes.Pangenome',
-	    name => $obj_name,
+	    name => $pg_name,
 	    data => $pangenome
 		      }]
 			    });
     $@ = '';
     eval { 
 	print "Ready to compare_models with pangenome comparison\n";
-        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'pangenome_ref'=>get_ws_name()."/".$obj_name, 'mc_name'=>"mc.2"});
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'pangenome_ref'=>get_ws_name()."/".$pg_name, 'mc_name'=>"mc.2"});
     };
     if ($@) {
 	print "Error during compare_models:\n".$@."\n";
@@ -126,11 +126,32 @@ eval {
 	$mc2=$ws_client->get_objects([{ref=>get_ws_name()."/"."mc.2"}])->[0]{data};
     };
     if ($@) {
-	warn "Error loading mc1 from workspace:\n".$@;
+	warn "Error loading mc3 from workspace:\n".$@;
     }
     $m1m2sim = $mc2->{models}->[0]->{model_similarity}->{'testmodel.2'};
     ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 1 && $m1m2sim->[4] == 1, "model similarity with pangenome OK");
-    done_testing(2);
+
+    $@ = '';
+    eval { 
+	print "Ready to compare_models with both proteome and pangenome comparison\n";
+        $return = $impl->compare_models({model_refs=>$models, 'workspace'=>get_ws_name(), 'pangenome_ref'=>get_ws_name()."/".$pg_name, 'mc_name'=>"mc.3", 'protcomp_ref'=>get_ws_name()."/".$pc_name});
+    };
+    if ($@) {
+	print "Error during compare_models:\n".$@."\n";
+    }
+
+    my $mc3;
+    eval {
+	$mc3=$ws_client->get_objects([{ref=>get_ws_name()."/"."mc.3"}])->[0]{data};
+    };
+    if ($@) {
+	warn "Error loading mc3 from workspace:\n".$@;
+    }
+    $m1m2sim = $mc3->{models}->[0]->{model_similarity}->{'testmodel.2'};
+    print Dumper($m1m2sim);
+    ok($m1m2sim->[0] == 7 && $m1m2sim->[1] == 12 && $m1m2sim->[2] == 4 && $m1m2sim->[3] == 1 && $m1m2sim->[4] == 2, "model similarity with pangenome and proteome comp OK");
+
+    done_testing(3);
 };
 my $err = undef;
 if ($@) {

@@ -295,7 +295,7 @@ sub compare_models
 	    $i++;
 	}
     }
-    elsif (defined $pangenome) {
+    if (defined $pangenome) {
 	foreach my $family (@{$pangenome->{orthologs}}) {
 	    my $in_models = {};
 	    my $family_model_data = {};
@@ -498,17 +498,17 @@ sub compare_models
 		    id => $match_id,
 		    compound_ref => $cpd->{compound_ref},
 		    name => $cpd->{name},
-		    number_models => 1,
+		    number_models => 0,
 		    core => 0,
 		    model_compound_compartments => { $model1->{id} => [[$cpd->{modelcompartment_ref},$cpd->{charge}]] }
 		};
 		$mc_compounds->{$mc_compound->{id}} = $mc_compound;
 	    } else {
-		if (! exists $cpds_registered{$match_id}) {
-		    $mc_compound->{number_models}++;
-		    $cpds_registered{$match_id} = 1;
-		}
 		push @{$mc_compound->{model_compound_compartments}->{$model1->{id}}}, [$cpd->{modelcompartment_ref},$cpd->{charge}];
+	    }
+	    if (! exists $cpds_registered{$match_id}) {
+		$mc_compound->{number_models}++;
+		$cpds_registered{$match_id} = 1;
 	    }
 	    foreach my $model2 (@models) {
 		next if $model1->{id} eq $model2->{id};
