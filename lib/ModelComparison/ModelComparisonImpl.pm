@@ -528,6 +528,11 @@ sub compare_models
 		    $match_id = $cpd->{id};
 		    $match_id =~ s/_[a-zA-z]\d+$//g;
 		}
+		if (! defined $match_id) {
+		    print STDERR "no match possible for biomass compound:\n";
+		    print STDERR Dumper($bcpd);
+		    next;
+		}
 		$model1bcpds{$match_id} = 0;
 		my $mc_bcpd = $mc_bcpds->{$match_id};
 		my $cref = defined $cpd->{modelcompartment_ref} ? $cpd->{modelcompartment_ref} : "";
