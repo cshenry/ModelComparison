@@ -19,26 +19,44 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
-    "mc_ref"
+    "report_name",
+    "report_ref"
 })
 public class ModelComparisonResult {
 
-    @JsonProperty("mc_ref")
-    private String mcRef;
+    @JsonProperty("report_name")
+    private String reportName;
+    @JsonProperty("report_ref")
+    private String reportRef;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("mc_ref")
-    public String getMcRef() {
-        return mcRef;
+    @JsonProperty("report_name")
+    public String getReportName() {
+        return reportName;
     }
 
-    @JsonProperty("mc_ref")
-    public void setMcRef(String mcRef) {
-        this.mcRef = mcRef;
+    @JsonProperty("report_name")
+    public void setReportName(String reportName) {
+        this.reportName = reportName;
     }
 
-    public ModelComparisonResult withMcRef(String mcRef) {
-        this.mcRef = mcRef;
+    public ModelComparisonResult withReportName(String reportName) {
+        this.reportName = reportName;
+        return this;
+    }
+
+    @JsonProperty("report_ref")
+    public String getReportRef() {
+        return reportRef;
+    }
+
+    @JsonProperty("report_ref")
+    public void setReportRef(String reportRef) {
+        this.reportRef = reportRef;
+    }
+
+    public ModelComparisonResult withReportRef(String reportRef) {
+        this.reportRef = reportRef;
         return this;
     }
 
@@ -54,7 +72,7 @@ public class ModelComparisonResult {
 
     @Override
     public String toString() {
-        return ((((("ModelComparisonResult"+" [mcRef=")+ mcRef)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((("ModelComparisonResult"+" [reportName=")+ reportName)+", reportRef=")+ reportRef)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

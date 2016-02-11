@@ -73,7 +73,8 @@ Model_ref is a string
 Protcomp_ref is a string
 Pangenome_ref is a string
 ModelComparisonResult is a reference to a hash where the following keys are defined:
-	mc_ref has a value which is a string
+	report_name has a value which is a string
+	report_ref has a value which is a string
 
 </pre>
 
@@ -93,7 +94,8 @@ Model_ref is a string
 Protcomp_ref is a string
 Pangenome_ref is a string
 ModelComparisonResult is a reference to a hash where the following keys are defined:
-	mc_ref has a value which is a string
+	report_name has a value which is a string
+	report_ref has a value which is a string
 
 
 =end text
@@ -1471,7 +1473,8 @@ biomasscpds has a value which is a reference to a list where each element is a M
 
 <pre>
 a reference to a hash where the following keys are defined:
-mc_ref has a value which is a string
+report_name has a value which is a string
+report_ref has a value which is a string
 
 </pre>
 
@@ -1480,7 +1483,8 @@ mc_ref has a value which is a string
 =begin text
 
 a reference to a hash where the following keys are defined:
-mc_ref has a value which is a string
+report_name has a value which is a string
+report_ref has a value which is a string
 
 
 =end text

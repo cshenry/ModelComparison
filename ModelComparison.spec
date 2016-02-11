@@ -182,7 +182,8 @@ module ModelComparison {
     } ModelComparison;
     
     typedef structure {
-	string mc_ref;
+	string report_name;
+	string report_ref;
     } ModelComparisonResult;
 
     /*
