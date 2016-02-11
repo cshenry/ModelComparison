@@ -144,6 +144,9 @@ sub compare_models
     my $token=$ctx->token;
     my $wsClient=Bio::KBase::workspace::Client->new($self->{'workspace-url'},token=>$token);
 
+    my $provenance = [{}];
+    $provenance = $ctx->provenance if defined $ctx->provenance;
+
     my @models;
     foreach my $model_ref (@model_refs) {
 	my $model=undef;
@@ -151,6 +154,7 @@ sub compare_models
 	    $model=$wsClient->get_objects([{ref=>$model_ref}])->[0]{data};
 	    $model->{model_ref} = $model_ref;
 	    push @models, $model;
+	    push @{$provenance->[0]->{'input_ws_objects'}}, $model_ref;
 	};
 	if ($@) {
 	    die "Error loading model from workspace:\n".$@;
@@ -161,6 +165,7 @@ sub compare_models
     if (defined $protcomp_ref) {
 	eval {
 	    $protcomp=$wsClient->get_objects([{ref=>$protcomp_ref}])->[0]{data};
+	    push @{$provenance->[0]->{'input_ws_objects'}}, $protcomp_ref;
 	};
 	if ($@) {
 	    die "Error loading protein comparison from workspace:\n".$@;
@@ -171,6 +176,7 @@ sub compare_models
     if (defined $pangenome_ref) {
 	eval {
 	    $pangenome=$wsClient->get_objects([{ref=>$pangenome_ref}])->[0]{data};
+	    push @{$provenance->[0]->{'input_ws_objects'}}, $pangenome_ref;
 	};
 	if ($@) {
 	    die "Error loading pangenome from workspace:\n".$@;
@@ -522,7 +528,8 @@ sub compare_models
 	my %model1bcpds;
 	foreach my $biomass (@{$model1->{biomasses}}) {
 	    foreach my $bcpd (@{$biomass->{biomasscompounds}}) {
-		my $cpd = $mcpd_refs{$bcpd->{modelcompound_ref}};
+		my $cpdkbid = pop @{[split "/", $bcpd->{modelcompound_ref}]};
+		my $cpd = $model1->{cpdhash}->{$cpdkbid};
 		my $match_id = $cpd->{cpdkbid};
 		if (! defined $match_id || $match_id =~ "cpd00000") {
 		    $match_id = $cpd->{id};
@@ -616,7 +623,7 @@ sub compare_models
     $mc->{protcomp_ref} = $protcomp_ref if (defined $protcomp_ref);
     $mc->{pangenome_ref} = $pangenome_ref if (defined $pangenome_ref);
 
-    my $metadata = $wsClient->save_objects({
+    my $mc_metadata = $wsClient->save_objects({
 	'workspace' => $workspace_name,
 	'objects' => [{
 	    type => 'KBaseFBA.ModelComparison',
@@ -624,7 +631,23 @@ sub compare_models
 	    data => $mc
 		      }]});
 
-    $return = { "mc_ref" => $workspace_name."/".$mc_name };
+    my $report = "ModelComparison saved to $workspace_name/$mc_name\n";
+    my $reportObj = { "objects_created"=>[{'ref'=>"$workspace_name/$mc_name", "description"=>"Model Comparison"}],
+		      "text_message"=>$report };
+    my $reportName = "model_comparison_report_${mc_name}";
+
+    my $metadata = $wsClient->save_objects({
+	'id' => $mc_metadata->[0]->[6],
+	'objects' => [{
+	    type => 'KBaseReport.Report',
+	    data => $reportObj,
+	    name => $reportName,
+	    'meta' => {},
+	    'hidden' => 1,
+	    'provenance' => $provenance
+		      }]});
+
+    $return = { 'report_name'=>$reportName, 'report_ref', $metadata->[0]->[6]."/".$metadata->[0]->[0]."/".$metadata->[0]->[4] };
 
     #END compare_models
     my @_bad_returns;
