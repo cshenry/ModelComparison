@@ -20,7 +20,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "report_name",
-    "report_ref"
+    "report_ref",
+    "mc_ref"
 })
 public class ModelComparisonResult {
 
@@ -28,6 +29,8 @@ public class ModelComparisonResult {
     private String reportName;
     @JsonProperty("report_ref")
     private String reportRef;
+    @JsonProperty("mc_ref")
+    private String mcRef;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("report_name")
@@ -60,6 +63,21 @@ public class ModelComparisonResult {
         return this;
     }
 
+    @JsonProperty("mc_ref")
+    public String getMcRef() {
+        return mcRef;
+    }
+
+    @JsonProperty("mc_ref")
+    public void setMcRef(String mcRef) {
+        this.mcRef = mcRef;
+    }
+
+    public ModelComparisonResult withMcRef(String mcRef) {
+        this.mcRef = mcRef;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -72,7 +90,7 @@ public class ModelComparisonResult {
 
     @Override
     public String toString() {
-        return ((((((("ModelComparisonResult"+" [reportName=")+ reportName)+", reportRef=")+ reportRef)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((("ModelComparisonResult"+" [reportName=")+ reportName)+", reportRef=")+ reportRef)+", mcRef=")+ mcRef)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

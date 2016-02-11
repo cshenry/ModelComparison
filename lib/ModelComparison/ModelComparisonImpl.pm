@@ -75,6 +75,7 @@ Pangenome_ref is a string
 ModelComparisonResult is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
+	mc_ref has a value which is a string
 
 </pre>
 
@@ -96,6 +97,7 @@ Pangenome_ref is a string
 ModelComparisonResult is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
+	mc_ref has a value which is a string
 
 
 =end text
@@ -649,7 +651,7 @@ sub compare_models
 	    'provenance' => $provenance
 		      }]});
 
-    $return = { 'report_name'=>$reportName, 'report_ref', $metadata->[0]->[6]."/".$metadata->[0]->[0]."/".$metadata->[0]->[4] };
+    $return = { 'report_name'=>$reportName, 'report_ref', $metadata->[0]->[6]."/".$metadata->[0]->[0]."/".$metadata->[0]->[4], 'mc_ref' => $workspace_name."/".$mc_name};
 
     #END compare_models
     my @_bad_returns;
@@ -1475,6 +1477,7 @@ biomasscpds has a value which is a reference to a list where each element is a M
 a reference to a hash where the following keys are defined:
 report_name has a value which is a string
 report_ref has a value which is a string
+mc_ref has a value which is a string
 
 </pre>
 
@@ -1485,6 +1488,7 @@ report_ref has a value which is a string
 a reference to a hash where the following keys are defined:
 report_name has a value which is a string
 report_ref has a value which is a string
+mc_ref has a value which is a string
 
 
 =end text
