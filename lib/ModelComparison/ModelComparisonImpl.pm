@@ -150,11 +150,6 @@ sub compare_models
 
     my $provenance = [{}];
     $provenance = $ctx->provenance if defined $ctx->provenance;
-    $provenance->[0]->{service} = "ModelComparison";
-    $provenance->[0]->{method} = "compare_models";
-#    $provenance->[0]->{time} = localtime();
-    $provenance->[0]->{method_params} = [$params];
-    $provenance->[0]->{service_ver} = '0.0.1';
 
     my @models;
     foreach my $model_ref (@model_refs) {
