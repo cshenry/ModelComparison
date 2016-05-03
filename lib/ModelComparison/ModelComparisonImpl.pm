@@ -150,6 +150,11 @@ sub compare_models
 
     my $provenance = [{}];
     $provenance = $ctx->provenance if defined $ctx->provenance;
+    $provenance->[0]->{service} = "ModelComparison";
+    $provenance->[0]->{method} = "compare_models";
+#    $provenance->[0]->{time} = localtime();
+    $provenance->[0]->{method_params} = [$params];
+    $provenance->[0]->{service_ver} = '0.0.1';
 
     my @models;
     foreach my $model_ref (@model_refs) {
@@ -632,7 +637,8 @@ sub compare_models
 	'objects' => [{
 	    type => 'KBaseFBA.ModelComparison',
 	    name => $mc_name,
-	    data => $mc
+	    data => $mc,
+	    'provenance' => $provenance
 		      }]});
 
     my $report = "ModelComparison saved to $workspace_name/$mc_name\n";
